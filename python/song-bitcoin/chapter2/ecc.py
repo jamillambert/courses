@@ -142,7 +142,7 @@ class Point:
 
     def __ne__(self, other):
         # this should be the inverse of the == operator
-        raise NotImplementedError
+        return not (self == other)
 
     def __repr__(self):
         if self.x is None:
