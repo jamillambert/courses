@@ -182,7 +182,6 @@ class Point:
             y = s * (self.x - x) - self.y # y3=s*(x1-x3)-y1
             return self.__class__(x, y, self.a, self.b)
 
-        raise NotImplementedError
 
 
 class PointTest(TestCase):
