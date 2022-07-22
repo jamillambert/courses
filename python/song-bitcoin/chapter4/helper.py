@@ -17,7 +17,7 @@ def run(test):
 # tag::source4[]
 def hash160(s):
     '''sha256 followed by ripemd160'''
-    return hashlib.new('ripemd160', hashlib.sha256(s).digest()).digest()  # <1>
+    return hashlib.new('rmd160', hashlib.sha256(s).digest()).digest()  # <1>
 # end::source4[]
 
 
