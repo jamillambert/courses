@@ -41,7 +41,7 @@ class TxFetcher:
             else:
                 tx = Tx.parse(BytesIO(raw), testnet=testnet)
             if tx.id() != tx_id:  # <1>
-                raise ValueError('not the same id: {} vs {}'.format(tx.id(), 
+                raise ValueError('not the same id: {} vs {}'.format(tx.id(),
                                   tx_id))
             cls.cache[tx_id] = tx
         cls.cache[tx_id].testnet = testnet
@@ -109,14 +109,17 @@ class Tx:
         return a Tx object
         '''
         # s.read(n) will return n bytes
-        # version is an integer in 4 bytes, little-endian
-        # num_inputs is a varint, use read_varint(s)
-        # parse num_inputs number of TxIns
-        # num_outputs is a varint, use read_varint(s)
-        # parse num_outputs number of TxOuts
-        # locktime is an integer in 4 bytes, little-endian
-        # return an instance of the class (see __init__ for args)
-        raise NotImplementedError
+        version = int.from_bytes(s.read(4), 'little')# version is an integer in 4 bytes, little-endian
+        num_inputs = read_varint(s) # num_inputs is a varint, use read_varint(s)
+        inputs = []
+        for _ in range(num_inputs):
+            inputs.append(TxIn.parse(s)) # parse num_inputs number of TxIns
+        num_outputs = read_varint(s) # num_outputs is a varint, use read_varint(s)
+        outputs = []
+        for _ in range(num_outputs): # parse num_outputs number of TxOuts
+            outputs.append(TxOut.parse(s))
+        locktime = int.from_bytes(s.read(4), 'little')# locktime is an integer in 4 bytes, little-endian
+        return cls(version, inputs, outputs, locktime, testnet=testnet)# return an instance of the class (see __init__ for args
 
     # tag::source6[]
     def serialize(self):
@@ -134,11 +137,13 @@ class Tx:
 
     def fee(self):
         '''Returns the fee of this transaction in satoshi'''
-        # initialize input sum and output sum
-        # use TxIn.value() to sum up the input amounts
-        # use TxOut.amount to sum up the output amounts
+        inputsum, outputsum = 0, 0 # initialize input sum and output sum
+        for i in self.tx_ins:
+            inputsum += i.value(testnet=self.testnet) # use TxIn.value() to sum up the input amounts
+        for o in self.tx_outs:
+            outputsum += o.amount # use TxOut.amount to sum up the output amounts
         # fee is input sum - output sum
-        raise NotImplementedError
+        return inputsum - outputsum
 
 
 # tag::source2[]
@@ -164,12 +169,11 @@ class TxIn:
         '''Takes a byte stream and parses the tx_input at the start
         return a TxIn object
         '''
-        # prev_tx is 32 bytes, little endian
-        # prev_index is an integer in 4 bytes, little endian
-        # use Script.parse to get the ScriptSig
-        # sequence is an integer in 4 bytes, little-endian
-        # return an instance of the class (see __init__ for args)
-        raise NotImplementedError
+        prev_tx = s.read(32)[::-1] # prev_tx is 32 bytes, little endian
+        prev_index = int.from_bytes(s.read(4), 'little') # prev_index is an integer in 4 bytes, little endian
+        script_sig = Script.parse(s) # use Script.parse to get the ScriptSig
+        sequence = int.from_bytes(s.read(4), 'little') # sequence is an integer in 4 bytes, little-endian
+        return cls(prev_tx, prev_index, script_sig, sequence) # return an instance of the class (see __init__ for args
 
     # tag::source5[]
     def serialize(self):
@@ -217,10 +221,9 @@ class TxOut:
         '''Takes a byte stream and parses the tx_output at the start
         return a TxOut object
         '''
-        # amount is an integer in 8 bytes, little endian
-        # use Script.parse to get the ScriptPubKey
-        # return an instance of the class (see __init__ for args)
-        raise NotImplementedError
+        amount = int.from_bytes(s.read(8), 'little') # amount is an integer in 8 bytes, little endian
+        ScriptPubKey = Script.parse(s) # use Script.parse to get the ScriptPubKey
+        return cls(amount, ScriptPubKey)# return an instance of the class (see __init__ for args
 
     # tag::source4[]
     def serialize(self):  # <1>
