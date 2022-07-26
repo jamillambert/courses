@@ -17,7 +17,7 @@ def run(test):
 
 def hash160(s):
     '''sha256 followed by ripemd160'''
-    return hashlib.new('ripemd160', hashlib.sha256(s).digest()).digest()
+    return hashlib.new('rmd160', hashlib.sha256(s).digest()).digest()
 
 
 def hash256(s):
