@@ -181,9 +181,9 @@ class Tx:
         '''Returns whether the input has a valid signature'''
         tx_in = self.tx_ins[input_index] # get the relevant input
         script_pubkey = tx_in.script_pubkey(testnet=self.testnet)# grab the previous ScriptPubKey
-        s_hash = self.sig_hash(input_index) # get the signature hash (z)
+        z = self.sig_hash(input_index) # get the signature hash (z)
         total = tx_in.script_sig + script_pubkey # combine the current ScriptSig and the previous ScriptPubKey
-        return total.evaluate(s_hash)# evaluate the combined script
+        return total.evaluate(z)# evaluate the combined script
 
     # tag::source2[]
     def verify(self):
@@ -197,14 +197,13 @@ class Tx:
     # end::source2[]
 
     def sign_input(self, input_index, private_key):
-        # get the signature hash (z)
-        # get der signature of z from private key
-        # append the SIGHASH_ALL to der (use SIGHASH_ALL.to_bytes(1, 'big'))
-        # calculate the sec
-        # initialize a new script with [sig, sec] as the cmds
-        # change input's script_sig to new script
-        # return whether sig is valid using self.verify_input
-        raise NotImplementedError
+        z = self.sig_hash(input_index) # get the signature hash (z)
+        der = private_key.sign(z).der() # get der signature of z from private key
+        sig = der + SIGHASH_ALL.to_bytes(1, 'big') # append the SIGHASH_ALL to der (use SIGHASH_ALL.to_bytes(1, 'big'))
+        sec = private_key.point.sec() # calculate the sec
+        new_script = Script([sig, sec])# initialize a new script with [sig, sec] as the cmds
+        self.tx_ins[input_index].script_sig = new_script # change input's script_sig to new script
+        return self.verify_input(input_index) # return whether sig is valid using self.verify_input
 
 
 class TxIn:
