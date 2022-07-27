@@ -160,21 +160,22 @@ class Tx:
     def sig_hash(self, input_index):
         '''Returns the integer representation of the hash that needs to get
         signed for index input_index'''
-        # start the serialization with version
+        s = int_to_little_endian(self.version, 4) # start the serialization with version
         # use int_to_little_endian in 4 bytes
-        # add how many inputs there are using encode_varint
-        # loop through each input using enumerate, so we have the input index
-            # if the input index is the one we're signing
-            # the previous tx's ScriptPubkey is the ScriptSig
-            # Otherwise, the ScriptSig is empty
-            # add the serialization of the input with the ScriptSig we want
-        # add how many outputs there are using encode_varint
-        # add the serialization of each output
-        # add the locktime using int_to_little_endian in 4 bytes
-        # add SIGHASH_ALL using int_to_little_endian in 4 bytes
-        # hash256 the serialization
-        # convert the result to an integer using int.from_bytes(x, 'big')
-        raise NotImplementedError
+        s += encode_varint(len(self.tx_ins))# add how many inputs there are using encode_varint
+        for i, tx_in in enumerate(self.tx_ins): # loop through each input using enumerate, so we have the input index
+            if i == input_index: # if the input index is the one we're signing
+                tx_script_sig = tx_in.script_pubkey(testnet=self.testnet) # the previous tx's ScriptPubkey is the ScriptSig
+            else:
+                tx_script_sig = None # Otherwise, the ScriptSig is empty
+            s += TxIn(prev_tx=tx_in.prev_tx, prev_index=tx_in.prev_index, script_sig=tx_script_sig, sequence=tx_in.sequence).serialize() # add the serialization of the input with the ScriptSig we want
+        s += encode_varint(len(self.tx_outs))# add how many outputs there are using encode_varint
+        for tx_out in self.tx_outs:
+            s += tx_out.serialize() # add the serialization of each output
+        s += int_to_little_endian(self.locktime, 4) # add the locktime using int_to_little_endian in 4 bytes
+        s += int_to_little_endian(SIGHASH_ALL, 4)# add SIGHASH_ALL using int_to_little_endian in 4 bytes
+        s_hash = hash256(s) # hash256 the serialization
+        return int.from_bytes(s_hash,'big') # convert the result to an integer using int.from_bytes(x, 'big')
 
     def verify_input(self, input_index):
         '''Returns whether the input has a valid signature'''
