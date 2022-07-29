@@ -4,4 +4,4 @@ Exercises and other work done for training courses
 ## Contents:
 
 1.  python/song-bitcoin:
-    - Textbook exercises from Programming Bitcoin by Jimmy Song, original files are in the separate repository programmingbitcoin
+    - Textbook exercises from Programming Bitcoin by Jimmy Song, original files are in the separate repository programmingbitcoin.  ripemd160 is called rmd160 on my system and all helper.py files have been updated to account for this.
