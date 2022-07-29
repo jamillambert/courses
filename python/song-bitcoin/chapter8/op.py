@@ -709,7 +709,7 @@ def op_checkmultisig(stack, z):
         # end::source1[]
         # parse all the points
         # parse all the signatures
-        # loop through the signatures
+        for der in der_signatures: # loop through the signatures
             # if we have no more points, signatures are no good
             # we loop until we find the point which works with this signature
                 # get the current point from the list of points
