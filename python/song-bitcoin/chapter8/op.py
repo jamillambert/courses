@@ -719,7 +719,11 @@ def op_checkmultisig(stack, z):
         #         return False
 
         # section below is from answers
+        i = 0
         for sig in sigs:
+            i += 1
+            print('run: ', i)
+            print('points length: ', len(points))
             # if we have no more points, signatures are no good
             if len(points) == 0:
                 LOGGER.info("signatures no good or not in right order")
