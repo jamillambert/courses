@@ -704,7 +704,7 @@ def op_checkmultisig(stack, z):
     der_signatures = []
     for _ in range(m):
         der_signatures.append(stack.pop()[:-1])  # <1>
-    stack.pop()  # <2>
+    stack.pop()  # Extra element due to off-by-one error
     try:
         # end::source1[]
         points = [S256Point.parse(sec) for sec in sec_pubkeys] # parse all the points
@@ -719,11 +719,7 @@ def op_checkmultisig(stack, z):
         #         return False
 
         # section below is from answers
-        i = 0
         for sig in sigs:
-            i += 1
-            print('run: ', i)
-            print('points length: ', len(points))
             # if we have no more points, signatures are no good
             if len(points) == 0:
                 LOGGER.info("signatures no good or not in right order")
