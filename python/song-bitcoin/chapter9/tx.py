@@ -260,9 +260,9 @@ class Tx:
         if len(self.tx_ins) != 1: # check that there is exactly 1 input
             return False
         input = self.tx_ins[0] # grab the first input
-        if input.prev_tx != b'\x00' * 32 # check that first input prev_tx is b'\x00' * 32 bytes
+        if input.prev_tx != b'\x00' * 32: # check that first input prev_tx is b'\x00' * 32 bytes
             return False
-        if input.prev_index != 0xffffffff # check that first input prev_index is 0xffffffff
+        if input.prev_index != 0xffffffff: # check that first input prev_index is 0xffffffff
             return false
         return True
 
