@@ -54,13 +54,13 @@ class Block:
         # BIP9 is signalled if the top 3 bits are 001
         # remember version is 32 bytes so right shift 29 (>> 29) and see if
         # that is 001
-        return self.version >> 29 == 1
+        return (self.version >> 29) == 1
 
     def bip91(self):
         '''Returns whether this block is signaling readiness for BIP91'''
         # BIP91 is signalled if the 5th bit from the right is 1
         # shift 4 bits to the right and see if the last bit is 1
-        raise NotImplementedError
+        return (self.version >> 4 & 1) == 1
 
     def bip141(self):
         '''Returns whether this block is signaling readiness for BIP141'''
