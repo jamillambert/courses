@@ -66,7 +66,7 @@ class Block:
         '''Returns whether this block is signaling readiness for BIP141'''
         # BIP91 is signalled if the 2nd bit from the right is 1
         # shift 1 bit to the right and see if the last bit is 1
-        raise NotImplementedError
+        return (self.version >> 1 & 1) == 1
 
     def target(self):
         '''Returns the proof-of-work target based on the bits'''
