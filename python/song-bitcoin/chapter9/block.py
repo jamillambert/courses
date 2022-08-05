@@ -25,14 +25,13 @@ class Block:
     def parse(cls, s):
         '''Takes a byte stream and parses a block. Returns a Block object'''
         # s.read(n) will read n bytes from the stream
-        # version - 4 bytes, little endian, interpret as int
-        # prev_block - 32 bytes, little endian (use [::-1] to reverse)
-        # merkle_root - 32 bytes, little endian (use [::-1] to reverse)
-        # timestamp - 4 bytes, little endian, interpret as int
-        # bits - 4 bytes
-        # nonce - 4 bytes
-        # initialize class
-        raise NotImplementedError
+        version = little_endian_to_int(s.read(4)) # version - 4 bytes, little endian, interpret as int
+        prev_block = s.read(32)[::-1] # prev_block - 32 bytes, little endian (use [::-1] to reverse)
+        merkle_root = s.read(32)[::-1] # merkle_root - 32 bytes, little endian (use [::-1] to reverse)
+        timestamp  = little_endian_to_int(s.read(4)) # timestamp - 4 bytes, little endian, interpret as int
+        bits = s.read(4)# bits - 4 bytes
+        nonce = s.read(4) # nonce - 4 bytes
+        return cls(version, prev_block, merkle_root, timestamp, bits, nonce) # initialize class
 
     def serialize(self):
         '''Returns the 80 byte block header'''
