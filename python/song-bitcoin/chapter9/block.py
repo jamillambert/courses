@@ -74,9 +74,9 @@ class Block:
 
     def difficulty(self):
         '''Returns the block difficulty based on the bits'''
-        # note difficulty is (target of lowest difficulty) / (self's target)
+        lowest = 0xffff * 256**(0x1d - 3) # note difficulty is (target of lowest difficulty) / (self's target)
         # lowest difficulty has bits that equal 0xffff001d
-        raise NotImplementedError
+        return lowest / self.target()
 
     def check_pow(self):
         '''Returns whether this block satisfies proof of work'''
