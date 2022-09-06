@@ -1,0 +1,1 @@
+/home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/hello/target/debug/libhello.rlib: /home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/hello/src/lib.rs
