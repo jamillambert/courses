@@ -1,0 +1,1 @@
+/home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/variables/target/debug/variables: /home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/variables/src/main.rs
