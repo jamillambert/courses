@@ -2,3 +2,4 @@ Udemy course
 1. Introduction
   Rust came from development of Firefox because Mozilla wanted to move away from c++
 2. Course started 05/09/2022 on Udemy
+3. Exercises cloned to Udemy/ultimate_rust_crash_course
