@@ -1,0 +1,1 @@
+/home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/exercise/c_simple_types/target/debug/libding_machine.rlib: /home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/exercise/c_simple_types/src/lib.rs
