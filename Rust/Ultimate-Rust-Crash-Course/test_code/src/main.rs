@@ -1,12 +1,11 @@
 
 fn main() {
-    let mut x = String::from("test string");
-    println!("main {}", x);
-    print_test(&mut x);
-    println!("after test {}", x);
+    let args: Vec<String> = std::env::args().skip(1).collect();
+    print_vec(& args);
 }
 
-fn print_test(s: &mut String) {
-    println!("test {}", s);
-    *s = String::from("Run once");
+fn print_vec(args: &Vec<String>) {
+    for arg in args {
+        println!("{}", arg);
+    }
 }
