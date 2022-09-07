@@ -1,6 +1,6 @@
 
 fn main() {
-    let args: Vec<String> = std::env::args().skip(1).collect();
+    let args: Vec<String> = std::env::args().collect();
     print_vec(& args);
 }
 
