@@ -21,19 +21,10 @@ impl Shot {
     fn points(self) -> i32 {
         // 1b. Implement this method to convert a Shot into points
         match self {
-            Shot::Bullseye => {
-                return 5;
-            } // - return 5 points if `self` is a `Shot::Bullseye`
-            Shot::Hit(dist) => {
-                if dist < 3.0 {
-                    return 2; // - return 2 points if `self` is a `Shot::Hit(x)` where x < 3.0
-                } else {
-                    return 1; // - return 1 point if `self` is a `Shot::Hit(x)` where x >= 3.0
-                }
-            }
-            Shot::Miss => {
-                return 0; // - return 0 points if `self` is a Miss
-            }
+            Shot::Bullseye => 5,// - return 5 points if `self` is a `Shot::Bullseye`
+            Shot::Hit(dist) if dist < 3.0 => 2, // - return 2 points if `self` is a `Shot::Hit(x)` where x < 3.0
+            Shot::Hit(dist) => 1, // - return 1 point if `self` is a `Shot::Hit(x)` where x >= 3.0
+            Shot::Miss => 0 // - return 0 points if `self` is a Miss
         }
     }
 }
