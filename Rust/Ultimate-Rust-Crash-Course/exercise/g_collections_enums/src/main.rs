@@ -10,14 +10,31 @@
 //
 // You will need to complete 1b as well before you will be able to run this program successfully.
 
+enum Shot {
+    Bullseye,
+    Hit(f64),
+    Miss,
+}
+
 impl Shot {
     // Here is a method for the `Shot` enum you just defined.
     fn points(self) -> i32 {
         // 1b. Implement this method to convert a Shot into points
-        // - return 5 points if `self` is a `Shot::Bullseye`
-        // - return 2 points if `self` is a `Shot::Hit(x)` where x < 3.0
-        // - return 1 point if `self` is a `Shot::Hit(x)` where x >= 3.0
-        // - return 0 points if `self` is a Miss
+        match self {
+            Shot::Bullseye => {
+                return 5;
+            } // - return 5 points if `self` is a `Shot::Bullseye`
+            Shot::Hit(dist) => {
+                if dist < 3.0 {
+                    return 2; // - return 2 points if `self` is a `Shot::Hit(x)` where x < 3.0
+                } else {
+                    return 1; // - return 1 point if `self` is a `Shot::Hit(x)` where x >= 3.0
+                }
+            }
+            Shot::Miss => {
+                return 0; // - return 0 points if `self` is a Miss
+            }
+        }
     }
 }
 
@@ -29,6 +46,17 @@ fn main() {
     // 2. For each coord in arrow_coords:
     //
     //   A. Call `coord.print_description()`
+    for coord in arrow_coords {
+        coord.print_description();
+        if coord.distance_from_center() < 1.0 {
+            shots.push(Shot::Bullseye);
+        } else if coord.distance_from_center() <= 5.0 {
+            shots.push(Shot::Hit(coord.distance_from_center()));
+        } else {
+            shots.push(Shot::Miss);
+        }
+
+    }
     //   B. Append the correct variant of `Shot` to the `shots` vector depending on the value of
     //   `coord.distance_from_center()`
     //      - Less than 1.0 -- `Shot::Bullseye`
@@ -38,6 +66,9 @@ fn main() {
 
     let mut total = 0;
     // 3. Finally, loop through each shot in shots and add its points to total
+    for shot in shots {
+        total += shot.points();
+    }
 
     println!("Final point total is: {}", total);
 }

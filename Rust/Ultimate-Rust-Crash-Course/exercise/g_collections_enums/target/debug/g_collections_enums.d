@@ -1,0 +1,1 @@
+/home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/exercise/g_collections_enums/target/debug/g_collections_enums: /home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/exercise/g_collections_enums/src/main.rs
