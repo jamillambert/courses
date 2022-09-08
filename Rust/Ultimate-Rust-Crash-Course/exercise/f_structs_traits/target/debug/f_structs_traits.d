@@ -1,0 +1,1 @@
+/home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/exercise/f_structs_traits/target/debug/f_structs_traits: /home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/exercise/f_structs_traits/src/main.rs

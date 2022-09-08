@@ -45,8 +45,7 @@ fn main() {
 fn inspect(arg: &String) {
     if arg.ends_with("s") {
         println!("{} is a plural", arg);
-    }
-    else {
+    } else {
         println!("{} is sligular", arg);
     }
 }
@@ -60,8 +59,7 @@ fn change(arg:&mut String) {
 fn eat(arg: String) -> bool {
     if arg.starts_with("b") && arg.contains("a") {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
