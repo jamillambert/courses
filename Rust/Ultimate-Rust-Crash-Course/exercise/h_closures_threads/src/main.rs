@@ -16,8 +16,8 @@ fn expensive_sum(v: Vec<i32>) -> i32 {
     // either need to dereference the argument once in the parameter list like this: `|&x|` or you
     // will need to dereference it each time you use it in the expression like this: `*x`
     v.iter()
-        // .filter() goes here
-        // .map() goes here
+        .filter(|&x| x % 2 == 0)
+        .map(|&x| x * x)
         .sum()
 }
 
@@ -32,7 +32,7 @@ fn main() {
     // join handle in a variable called `handle`. Once you've done this you should be able to run
     // the code and see the Child thread output in the middle of the main thread's letters
     //
-    //let handle = ...
+    let handle = thread::spawn(move || expensive_sum(my_vector));
 
     // While the child thread is running, the main thread will also do some work
     for letter in vec!["a", "b", "c", "d", "e", "f"] {
