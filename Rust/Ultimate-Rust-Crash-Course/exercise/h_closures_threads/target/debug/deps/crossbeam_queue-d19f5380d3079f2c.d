@@ -1,0 +1,10 @@
+/home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/exercise/h_closures_threads/target/debug/deps/crossbeam_queue-d19f5380d3079f2c.rmeta: /home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/lib.rs /home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/array_queue.rs /home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/err.rs /home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/seg_queue.rs
+
+/home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/exercise/h_closures_threads/target/debug/deps/libcrossbeam_queue-d19f5380d3079f2c.rlib: /home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/lib.rs /home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/array_queue.rs /home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/err.rs /home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/seg_queue.rs
+
+/home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/exercise/h_closures_threads/target/debug/deps/crossbeam_queue-d19f5380d3079f2c.d: /home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/lib.rs /home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/array_queue.rs /home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/err.rs /home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/seg_queue.rs
+
+/home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/lib.rs:
+/home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/array_queue.rs:
+/home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/err.rs:
+/home/jamil/.cargo/registry/src/github.com-1ecc6299db9ec823/crossbeam-queue-0.2.3/src/seg_queue.rs:

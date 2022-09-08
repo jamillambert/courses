@@ -1,0 +1,1 @@
+/home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/exercise/h_closures_threads/target/debug/h_closures_threads: /home/jamil/build/github.com/jamillambert/courses/Rust/Ultimate-Rust-Crash-Course/exercise/h_closures_threads/src/main.rs
