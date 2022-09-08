@@ -24,7 +24,7 @@ impl Shot {
             Shot::Bullseye => 5,// - return 5 points if `self` is a `Shot::Bullseye`
             Shot::Hit(dist) if dist < 3.0 => 2, // - return 2 points if `self` is a `Shot::Hit(x)` where x < 3.0
             Shot::Hit(dist) => 1, // - return 1 point if `self` is a `Shot::Hit(x)` where x >= 3.0
-            Shot::Miss => 0 // - return 0 points if `self` is a Miss
+            Shot::Miss => 0, // - return 0 points if `self` is a Miss
         }
     }
 }
@@ -39,13 +39,12 @@ fn main() {
     //   A. Call `coord.print_description()`
     for coord in arrow_coords {
         coord.print_description();
-        if coord.distance_from_center() < 1.0 {
-            shots.push(Shot::Bullseye);
-        } else if coord.distance_from_center() <= 5.0 {
-            shots.push(Shot::Hit(coord.distance_from_center()));
-        } else {
-            shots.push(Shot::Miss);
-        }
+        let shot = match coord.distance_from_center(){
+            x if x < 1.0 => Shot::Bullseye,
+            x if x <= 5.0 => Shot::Hit(x),
+            _ => Shot::Miss,
+        };
+        shots.push(shot);
 
     }
     //   B. Append the correct variant of `Shot` to the `shots` vector depending on the value of
