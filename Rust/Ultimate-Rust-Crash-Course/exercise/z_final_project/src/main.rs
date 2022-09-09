@@ -99,6 +99,7 @@ fn print_usage_and_exit() {
     println!("USAGE (when in doubt, use a .png extension on your filenames)");
     println!("blur INFILE OUTFILE amount<f32>");
     println!("brighten INFILE OUTFILE amount<i32>");
+    println!("crop INFILE OUTFILE x<u32> y<u32> width<u32> height<u32>");
     println!("fractal OUTFILE");
     // **OPTION**
     // Print useful information about what subcommands and arguments you can use
@@ -130,14 +131,17 @@ fn brighten(infile: String, outfile: String, amount: i32) {
     img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
-fn crop(infile: String, outfile: String) {
+fn crop(infile: String, outfile: String, x: u32, y: u32, width: u32, height: u32) {
     // See blur() for an example of how to open an image.
+    let mut img = image::open(infile).expect("Failed to open INFILE.");
 
     // .crop() takes four arguments: x: u32, y: u32, width: u32, height: u32
     // You may hard-code them, if you like.  It returns a new image.
+    img.crop(x, y, width, height);
 
     // Challenge: parse the four values from the command-line and pass them
     // through to this function.
+    img.save(outfile).expect("Failed writing OUTFILE.");
 
     // See blur() for an example of how to save the image.
 }
