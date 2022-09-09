@@ -26,12 +26,6 @@
 //     let positive_number: u32 = some_string.parse().expect("Failed to parse a number");
 
 fn main() {
-    // 1. First, you need to implement some basic command-line argument handling
-    // so you can make your program do different things.  Here's a little bit
-    // to get you started doing manual parsing.
-    //
-    // Challenge: If you're feeling really ambitious, you could delete this code
-    // and use the "clap" library instead: https://docs.rs/clap/2.32.0/clap/
     let mut args: Vec<String> = std::env::args().skip(1).collect();
     if args.len() < 2 {
         print_usage_and_exit();
@@ -50,31 +44,31 @@ fn main() {
                 if args.len() < 1 {
                     print_usage_and_exit();
                 }
-                let amount: f32 = args.remove(0).parse().unwrap();
+                let amount: f32 = args.remove(0).parse().expect("Failed to parse a number");
                 img = blur(&img, amount);
             }
             "brighten" => {
                 if args.len() < 1 {
                     print_usage_and_exit();
                 }
-                let amount: i32 = args.remove(0).parse().unwrap();
+                let amount: i32 = args.remove(0).parse().expect("Failed to parse a number");
                 img = brighten(&img, amount);
             }
             "crop" => {
                 if args.len() < 4 {
                     print_usage_and_exit();
                 }
-                let x: u32 = args.remove(0).parse().unwrap();
-                let y: u32 = args.remove(0).parse().unwrap();
-                let width: u32 = args.remove(0).parse().unwrap();
-                let height: u32 = args.remove(0).parse().unwrap();
+                let x: u32 = args.remove(0).parse().expect("Failed to parse a number");
+                let y: u32 = args.remove(0).parse().expect("Failed to parse a number");
+                let width: u32 = args.remove(0).parse().expect("Failed to parse a number");
+                let height: u32 = args.remove(0).parse().expect("Failed to parse a number");
                 img = crop(&mut img, x, y, width, height);
             }
             "rotate" => {
                 if args.len() < 1 {
                     print_usage_and_exit();
                 }
-                let angle: u32 = args.remove(0).parse().unwrap();
+                let angle: u32 = args.remove(0).parse().expect("Failed to parse a number");
                 img = rotate(&img, angle);
             }
             "invert" => {
