@@ -38,7 +38,6 @@ fn main() {
     }
     let subcommand = args.remove(0);
     match subcommand.as_str() {
-        // EXAMPLE FOR CONVERSION OPERATIONS
         "blur" => {
             if args.len() != 3 {
                 print_usage_and_exit();
@@ -46,13 +45,8 @@ fn main() {
             let infile = args.remove(0);
             let outfile = args.remove(0);
             let amount: f32 = args.remove(0).parse().unwrap();
-            // **OPTION**
-            // Improve the blur implementation -- see the blur() function below
             blur(infile, outfile, amount);
         }
-
-        // **OPTION**
-        // Brighten -- see the brighten() function below
         "brighten" => {
             if args.len() != 3 {
                 print_usage_and_exit();
@@ -62,10 +56,6 @@ fn main() {
             let amount: i32 = args.remove(0).parse().unwrap();
             brighten(infile, outfile, amount);
         }
-
-
-        // **OPTION**
-        // Crop -- see the crop() function below
         "crop" => {
            if args.len() != 6 {
                print_usage_and_exit();
@@ -78,6 +68,15 @@ fn main() {
            let height: u32 = args.remove(0).parse().unwrap();
            crop(infile, outfile, x, y, width, height);
        }
+       "rotate" => {
+          if args.len() != 3 {
+              print_usage_and_exit();
+          }
+          let infile = args.remove(0);
+          let outfile = args.remove(0);
+          let angle: u32 = args.remove(0).parse().unwrap();
+          rotate(infile, outfile, angle);
+      }
         // **OPTION**
         // Rotate -- see the rotate() function below
 
@@ -111,6 +110,7 @@ fn print_usage_and_exit() {
     println!("blur INFILE OUTFILE amount<f32>");
     println!("brighten INFILE OUTFILE amount<i32>");
     println!("crop INFILE OUTFILE x<u32> y<u32> width<u32> height<u32>");
+    println!("rotate INFILE OUTFILE amount<90, 180 or 270>");
     println!("fractal OUTFILE");
     // **OPTION**
     // Print useful information about what subcommands and arguments you can use
@@ -119,57 +119,31 @@ fn print_usage_and_exit() {
 }
 
 fn blur(infile: String, outfile: String, amount: f32) {
-    // Here's how you open an existing image file
     let img = image::open(infile).expect("Failed to open INFILE.");
-    // **OPTION**
-    // Parse the blur amount (an f32) from the command-line and pass it through
-    // to this function, instead of hard-coding it to 2.0.
     let img2 = img.blur(amount);
-    // Here's how you save an image to a file.
     img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
 fn brighten(infile: String, outfile: String, amount: i32) {
-    // See blur() for an example of how to open / save an image.
     let img = image::open(infile).expect("Failed to open INFILE.");
-
-    // .brighten() takes one argument, an i32.  Positive numbers brighten the
-    // image. Negative numbers darken it.  It returns a new image.
-    let img2 = img.brighten(amount);
-
-    // Challenge: parse the brightness amount from the command-line and pass it
-    // through to this function.
+    let img2 = img.brighten(amount); // positive numbers brighten the image. Negative numbers darken it
     img2.save(outfile).expect("Failed writing OUTFILE.");
 }
 
 fn crop(infile: String, outfile: String, x: u32, y: u32, width: u32, height: u32) {
-    // See blur() for an example of how to open an image.
     let mut img = image::open(infile).expect("Failed to open INFILE.");
-
-    // .crop() takes four arguments: x: u32, y: u32, width: u32, height: u32
-    // You may hard-code them, if you like.  It returns a new image.
     let img2 = img.crop(x, y, width, height);
-
-    // Challenge: parse the four values from the command-line and pass them
-    // through to this function.
     img2.save(outfile).expect("Failed writing OUTFILE.");
-
-    // See blur() for an example of how to save the image.
 }
 
-fn rotate(infile: String, outfile: String) {
-    // See blur() for an example of how to open an image.
-
-    // There are 3 rotate functions to choose from (all clockwise):
-    //   .rotate90()
-    //   .rotate180()
-    //   .rotate270()
-    // All three methods return a new image.  Pick one and use it!
-
-    // Challenge: parse the rotation amount from the command-line, pass it
-    // through to this function to select which method to call.
-
-    // See blur() for an example of how to save the image.
+fn rotate(infile: String, outfile: String, angle: u32) {
+    let mut img = image::open(infile).expect("Failed to open INFILE.");
+    match angle {
+        90 => img.rotate90().save(outfile).expect("Failed writing OUTFILE."),
+        180 => img.rotate180().save(outfile).expect("Failed writing OUTFILE."),
+        270 => img.rotate270().save(outfile).expect("Failed writing OUTFILE."),
+        _ => print_usage_and_exit(),
+    }
 }
 
 fn invert(infile: String, outfile: String) {
