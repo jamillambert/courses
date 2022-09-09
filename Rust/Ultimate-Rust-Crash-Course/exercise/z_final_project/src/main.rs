@@ -36,12 +36,13 @@ fn main() {
     if args.len() < 2 {
         print_usage_and_exit();
     }
-    let infile = args.remove(0);
-    let mut img = image::open(infile).expect("Failed to open INFILE.");
+    let mut img;
+    if args[1].as_str() == "fractal" {
+        img = fractal();
+    } else {
+        img = image::open(args.remove(0)).expect("Failed to open INFILE.");
+    }
     let outfile = args.remove(0);
-    // if outfile.as_str() == "fractal" {
-    //     fractal(infile);
-    // }
     while args.len() > 0 {
         let subcommand = args.remove(0);
         match subcommand.as_str() {
@@ -50,14 +51,14 @@ fn main() {
                     print_usage_and_exit();
                 }
                 let amount: f32 = args.remove(0).parse().unwrap();
-                img = blur(img, amount);
+                img = blur(&img, amount);
             }
             "brighten" => {
                 if args.len() < 1 {
                     print_usage_and_exit();
                 }
                 let amount: i32 = args.remove(0).parse().unwrap();
-                img = brighten(img, amount);
+                img = brighten(&img, amount);
             }
             "crop" => {
                 if args.len() < 4 {
@@ -67,20 +68,20 @@ fn main() {
                 let y: u32 = args.remove(0).parse().unwrap();
                 let width: u32 = args.remove(0).parse().unwrap();
                 let height: u32 = args.remove(0).parse().unwrap();
-                img = crop(img, x, y, width, height);
+                img = crop(&mut img, x, y, width, height);
             }
             "rotate" => {
                 if args.len() < 1 {
                     print_usage_and_exit();
                 }
                 let angle: u32 = args.remove(0).parse().unwrap();
-                img = rotate(img, angle);
+                img = rotate(&img, angle);
             }
             "invert" => {
-                img = invert(img);
+                invert(&mut img);
             }
             "grayscale" => {
-                img = grayscale(img);
+                img = grayscale(&img);
             }
             "fractal" => {
                 img = fractal();
@@ -102,22 +103,22 @@ fn print_usage_and_exit() {
     println!("rotate amount<90, 180 or 270>");
     println!("invert");
     println!("grayscale");
-    println!("fractal");
+    println!("fractal (does not require INFILE)");
     println!("e.g. image1.png image1_modified.png rotate 90");
     println!("or e.g. image1.png fractal");
     std::process::exit(-1);
 }
 
-fn blur(img: image::DynamicImage, amount: f32) -> image::DynamicImage {
+fn blur(img: &image::DynamicImage, amount: f32) -> image::DynamicImage {
     img.blur(amount)
 }
 
-fn brighten(img: image::DynamicImage, amount: i32) -> image::DynamicImage {
+fn brighten(img: &image::DynamicImage, amount: i32) -> image::DynamicImage {
     img.brighten(amount) // positive numbers brighten the image. Negative numbers darken it
 }
 
 fn crop(
-    mut img: image::DynamicImage,
+    img: &mut image::DynamicImage,
     x: u32,
     y: u32,
     width: u32,
@@ -126,21 +127,25 @@ fn crop(
     img.crop(x, y, width, height)
 }
 
-fn rotate(img: image::DynamicImage, angle: u32) -> image::DynamicImage {
+fn rotate(img: &image::DynamicImage, angle: u32) -> image::DynamicImage {
     match angle {
         90 => img.rotate90(),
         180 => img.rotate180(),
         270 => img.rotate270(),
-        _ => img,
+        _ => {
+            println!(
+                "Incorrect angle entered as an argument for rotate, must be one of 90, 180 and 270"
+            );
+            std::process::exit(-1);
+        }
     }
 }
 
-fn invert(mut img: image::DynamicImage) -> image::DynamicImage {
+fn invert(img: &mut image::DynamicImage) {
     img.invert();
-    return img;
 }
 
-fn grayscale(img: image::DynamicImage) -> image::DynamicImage {
+fn grayscale(img: &image::DynamicImage) -> image::DynamicImage {
     img.grayscale()
 }
 
