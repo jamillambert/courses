@@ -66,7 +66,18 @@ fn main() {
 
         // **OPTION**
         // Crop -- see the crop() function below
-
+        "crop" => {
+           if args.len() != 6 {
+               print_usage_and_exit();
+           }
+           let infile = args.remove(0);
+           let outfile = args.remove(0);
+           let x: u32 = args.remove(0).parse().unwrap();
+           let y: u32 = args.remove(0).parse().unwrap();
+           let width: u32 = args.remove(0).parse().unwrap();
+           let height: u32 = args.remove(0).parse().unwrap();
+           crop(infile, outfile, x, y, width, height);
+       }
         // **OPTION**
         // Rotate -- see the rotate() function below
 
@@ -137,11 +148,11 @@ fn crop(infile: String, outfile: String, x: u32, y: u32, width: u32, height: u32
 
     // .crop() takes four arguments: x: u32, y: u32, width: u32, height: u32
     // You may hard-code them, if you like.  It returns a new image.
-    img.crop(x, y, width, height);
+    let img2 = img.crop(x, y, width, height);
 
     // Challenge: parse the four values from the command-line and pass them
     // through to this function.
-    img.save(outfile).expect("Failed writing OUTFILE.");
+    img2.save(outfile).expect("Failed writing OUTFILE.");
 
     // See blur() for an example of how to save the image.
 }
