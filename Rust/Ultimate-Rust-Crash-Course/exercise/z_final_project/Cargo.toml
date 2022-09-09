@@ -1,6 +1,6 @@
 [package]
 name = "mirage"
-version = "1.0.0"
+version = "2.0.0"
 authors = ["Nathan Stocks <nathan.stocks@gmail.com>, Jamil Lambert <jamil.lambert@proton.me>"]
 edition = "2018"
 

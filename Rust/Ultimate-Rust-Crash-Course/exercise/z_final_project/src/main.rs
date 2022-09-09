@@ -33,145 +33,119 @@ fn main() {
     // Challenge: If you're feeling really ambitious, you could delete this code
     // and use the "clap" library instead: https://docs.rs/clap/2.32.0/clap/
     let mut args: Vec<String> = std::env::args().skip(1).collect();
-    if args.is_empty() {
+    if args.len() < 2 {
         print_usage_and_exit();
     }
-    let subcommand = args.remove(0);
-    match subcommand.as_str() {
-        "blur" => {
-            if args.len() != 3 {
+    let infile = args.remove(0);
+    let mut img = image::open(infile).expect("Failed to open INFILE.");
+    let outfile = args.remove(0);
+    // if outfile.as_str() == "fractal" {
+    //     fractal(infile);
+    // }
+    while args.len() > 0 {
+        let subcommand = args.remove(0);
+        match subcommand.as_str() {
+            "blur" => {
+                if args.len() < 1 {
+                    print_usage_and_exit();
+                }
+                let amount: f32 = args.remove(0).parse().unwrap();
+                img = blur(img, amount);
+            }
+            "brighten" => {
+                if args.len() < 1 {
+                    print_usage_and_exit();
+                }
+                let amount: i32 = args.remove(0).parse().unwrap();
+                img = brighten(img, amount);
+            }
+            "crop" => {
+                if args.len() < 4 {
+                    print_usage_and_exit();
+                }
+                let x: u32 = args.remove(0).parse().unwrap();
+                let y: u32 = args.remove(0).parse().unwrap();
+                let width: u32 = args.remove(0).parse().unwrap();
+                let height: u32 = args.remove(0).parse().unwrap();
+                img = crop(img, x, y, width, height);
+            }
+            "rotate" => {
+                if args.len() < 1 {
+                    print_usage_and_exit();
+                }
+                let angle: u32 = args.remove(0).parse().unwrap();
+                img = rotate(img, angle);
+            }
+            "invert" => {
+                img = invert(img);
+            }
+            "grayscale" => {
+                img = grayscale(img);
+            }
+            "fractal" => {
+                img = fractal();
+            }
+            _ => {
                 print_usage_and_exit();
             }
-            let infile = args.remove(0);
-            let outfile = args.remove(0);
-            let amount: f32 = args.remove(0).parse().unwrap();
-            blur(infile, outfile, amount);
-        }
-        "brighten" => {
-            if args.len() != 3 {
-                print_usage_and_exit();
-            }
-            let infile = args.remove(0);
-            let outfile = args.remove(0);
-            let amount: i32 = args.remove(0).parse().unwrap();
-            brighten(infile, outfile, amount);
-        }
-        "crop" => {
-            if args.len() != 6 {
-                print_usage_and_exit();
-            }
-            let infile = args.remove(0);
-            let outfile = args.remove(0);
-            let x: u32 = args.remove(0).parse().unwrap();
-            let y: u32 = args.remove(0).parse().unwrap();
-            let width: u32 = args.remove(0).parse().unwrap();
-            let height: u32 = args.remove(0).parse().unwrap();
-            crop(infile, outfile, x, y, width, height);
-        }
-        "rotate" => {
-            if args.len() != 3 {
-                print_usage_and_exit();
-            }
-            let infile = args.remove(0);
-            let outfile = args.remove(0);
-            let angle: u32 = args.remove(0).parse().unwrap();
-            rotate(infile, outfile, angle);
-        }
-        "invert" => {
-            if args.len() != 2 {
-                print_usage_and_exit();
-            }
-            let infile = args.remove(0);
-            let outfile = args.remove(0);
-            invert(infile, outfile);
-        }
-        "grayscale" => {
-            if args.len() != 2 {
-                print_usage_and_exit();
-            }
-            let infile = args.remove(0);
-            let outfile = args.remove(0);
-            grayscale(infile, outfile);
-        }
-        "fractal" => {
-            if args.len() != 1 {
-                print_usage_and_exit();
-            }
-            let outfile = args.remove(0);
-            fractal(outfile);
-        }
-        _ => {
-            print_usage_and_exit();
         }
     }
+    img.save(outfile).expect("Failed writing OUTFILE.");
 }
 
 fn print_usage_and_exit() {
     println!("USAGE (when in doubt, use a .png extension on your filenames)");
-    println!("blur INFILE OUTFILE amount<f32>");
-    println!("brighten INFILE OUTFILE amount<i32>");
-    println!("crop INFILE OUTFILE x<u32> y<u32> width<u32> height<u32>");
-    println!("rotate INFILE OUTFILE amount<90, 180 or 270>");
-    println!("invert INFILE OUTFILE");
-    println!("grayscale INFILE OUTFILE");
-    println!("fractal OUTFILE");
-    // **OPTION**
-    // Print useful information about what subcommands and arguments you can use
-    // println!("...");
+    println!("INFILE OUTFILE (command options) (command2 options2) ...");
+    println!("Where (command options) are in the following list:");
+    println!("brighten amount<i32>");
+    println!("crop x<u32> y<u32> width<u32> height<u32>");
+    println!("rotate amount<90, 180 or 270>");
+    println!("invert");
+    println!("grayscale");
+    println!("fractal");
+    println!("e.g. image1.png image1_modified.png rotate 90");
+    println!("or e.g. image1.png fractal");
     std::process::exit(-1);
 }
 
-fn blur(infile: String, outfile: String, amount: f32) {
-    let img = image::open(infile).expect("Failed to open INFILE.");
-    let img2 = img.blur(amount);
-    img2.save(outfile).expect("Failed writing OUTFILE.");
+fn blur(img: image::DynamicImage, amount: f32) -> image::DynamicImage {
+    img.blur(amount)
 }
 
-fn brighten(infile: String, outfile: String, amount: i32) {
-    let img = image::open(infile).expect("Failed to open INFILE.");
-    let img2 = img.brighten(amount); // positive numbers brighten the image. Negative numbers darken it
-    img2.save(outfile).expect("Failed writing OUTFILE.");
+fn brighten(img: image::DynamicImage, amount: i32) -> image::DynamicImage {
+    img.brighten(amount) // positive numbers brighten the image. Negative numbers darken it
 }
 
-fn crop(infile: String, outfile: String, x: u32, y: u32, width: u32, height: u32) {
-    let mut img = image::open(infile).expect("Failed to open INFILE.");
-    let img2 = img.crop(x, y, width, height);
-    img2.save(outfile).expect("Failed writing OUTFILE.");
+fn crop(
+    mut img: image::DynamicImage,
+    x: u32,
+    y: u32,
+    width: u32,
+    height: u32,
+) -> image::DynamicImage {
+    img.crop(x, y, width, height)
 }
 
-fn rotate(infile: String, outfile: String, angle: u32) {
-    let img = image::open(infile).expect("Failed to open INFILE.");
+fn rotate(img: image::DynamicImage, angle: u32) -> image::DynamicImage {
     match angle {
-        90 => img
-            .rotate90()
-            .save(outfile)
-            .expect("Failed writing OUTFILE."),
-        180 => img
-            .rotate180()
-            .save(outfile)
-            .expect("Failed writing OUTFILE."),
-        270 => img
-            .rotate270()
-            .save(outfile)
-            .expect("Failed writing OUTFILE."),
-        _ => print_usage_and_exit(),
+        90 => img.rotate90(),
+        180 => img.rotate180(),
+        270 => img.rotate270(),
+        _ => img,
     }
 }
 
-fn invert(infile: String, outfile: String) {
-    let mut img = image::open(infile).expect("Failed to open INFILE.");
+fn invert(mut img: image::DynamicImage) -> image::DynamicImage {
     img.invert();
-    img.save(outfile).expect("Failed writing OUTFILE.");
+    return img;
 }
 
-fn grayscale(infile: String, outfile: String) {
-    let img = image::open(infile).expect("Failed to open INFILE.");
-    let img2 = img.grayscale();
-    img2.save(outfile).expect("Failed writing OUTFILE.");
+fn grayscale(img: image::DynamicImage) -> image::DynamicImage {
+    img.grayscale()
 }
 
 // This code was adapted from https://github.com/PistonDevelopers/image
-fn fractal(outfile: String) {
+fn fractal() -> image::DynamicImage {
     let width = 800;
     let height = 800;
 
@@ -203,7 +177,7 @@ fn fractal(outfile: String) {
         *pixel = image::Rgb([red, green, blue]);
     }
 
-    imgbuf.save(outfile).unwrap();
+    return image::ImageRgb8(imgbuf);
 }
 
 // **SUPER CHALLENGE FOR LATER** - Let's face it, you don't have time for this during class.
