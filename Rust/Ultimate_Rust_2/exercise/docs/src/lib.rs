@@ -4,6 +4,14 @@
 //
 // Once you've got the documentation here, run `cargo doc --no-deps --open` and take a look!
 
+//! A pumpkin is a cultivar of winter squash that is round with smooth, slightly ribbed skin,
+//! and is most often deep yellow to orange in coloration. The thick shell contains the seeds
+//! and pulp. The name is most commonly used for cultivars of Cucurbita pepo, but some cultivars
+//! of Cucurbita maxima, C. argyrosperma, and C. moschata with similar appearance are also
+//! sometimes called "pumpkins".
+//!
+//! ![image of a pumpkin](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/FrenchMarketPumpkinsB.jpg/700px-FrenchMarketPumpkinsB.jpg)
+
 // 2. What about an image!? Add an image of a pumpkin to the end of the module-level documentation.
 // The markdown format is ![some alt text](https://url-to-the-image.png)
 // Here's the image to link to: https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/FrenchMarketPumpkinsB.jpg/700px-FrenchMarketPumpkinsB.jpg
@@ -15,8 +23,16 @@
 // - Document the "roundness" field, explaining that it is a percentage
 // - Document the "orangeness" field, explaining that it is a number from 8 to 27
 
+/// Big orange thing.
+///
+/// # Recipes
+///
+/// Recipes will be coming soon
+
 pub struct Pumpkin {
+    /// `roundness` is a percentage
     pub roundness: f32,
+    /// `orangeness` in a number from 8 to 27
     pub orangeness: i32,
 }
 
@@ -24,6 +40,7 @@ pub struct Pumpkin {
 // can't be used for pie. :'-(
 
 impl Pumpkin {
+    /// `smash()` smashes the pumpkin and then it can't be used for pie 🥧.
     pub fn smash(self) {}
 }
 
