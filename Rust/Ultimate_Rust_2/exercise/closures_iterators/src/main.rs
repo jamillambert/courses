@@ -1,5 +1,3 @@
-// Yes, yes, we know. It's an exercise, compiler, we want it that way!
-#[allow(unused_mut)]
 
 fn main() {
     // 1. Uncomment the code below. Create a closure that returns the square of an integer (the
@@ -24,7 +22,7 @@ fn main() {
     // Hint 1: You'll need .iter_mut() -- bonus points if you use the shorter, syntactic sugar form!
     // Hint 2: `x` will be a mutable reference, so remember to dereference it to use it
 
-    let mut numbers = vec![1, 2, 3, 4];
+    let numbers = vec![1, 2, 3, 4];
     let num_times_three = numbers.into_iter().map(|x| x * 3).collect::<Vec<_>>();
     println!("{:?}", num_times_three); // should print [3, 6, 9, 12]
 
