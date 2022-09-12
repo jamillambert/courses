@@ -19,7 +19,7 @@ fn count_to_5() -> i32 {
     5
 }
 
-fn main() {
+fn main() {T
     println!("I can count to {}", count_to_5());
 }
 
