@@ -1,6 +1,6 @@
 // Silence some warnings so they don't distract from the exercise.
 #![allow(dead_code, unused_imports, unused_variables)]
-use crossbeam::channel;
+use crossbeam::channel::{self, Receiver, Sender};
 use std::thread;
 use std::time::Duration;
 
@@ -13,6 +13,12 @@ fn expensive_sum(v: Vec<i32>) -> i32 {
     sleep_ms(500);
     println!("Child thread: just about finished");
     v.iter().filter(|&x| x % 2 == 0).map(|x| x * x).sum()
+}
+
+pub fn print_channel(name: &str, items: Receiver<&str>) {
+    for item in items {
+        println!("{} received: {:?}", name, item);
+    }
 }
 
 fn main() {
@@ -95,5 +101,24 @@ fn main() {
     // On the child threads print out the values you receive. Close the sending side in the main
     // thread by calling `drop(tx)` (assuming you named your sender channel variable `tx`).  Join
     // the child threads.
+
+    println!("\nChallenge outputs:\n");
+    let (challenge_tx, challenge_rx) = channel::bounded(8);
+    let challenge_rx2 = challenge_rx.clone();
+
+    let handle_c = thread::spawn(|| print_channel("child c", challenge_rx));
+    let handle_d = thread::spawn(|| print_channel("child d", challenge_rx2));
+
+    let print_list = ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6", "item 7", "item 8"];
+    for item in print_list {
+        println!("Main thread sent {}", item);
+        let _ = challenge_tx.send(item);
+    }
+
+    drop(challenge_tx);
+    let _a = handle_c.join();
+    let _b = handle_d.join();
+
+    println!("\nChallenge output end\n");
     println!("Main thread: Exiting.")
 }
