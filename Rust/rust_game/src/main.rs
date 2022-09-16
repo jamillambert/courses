@@ -6,5 +6,8 @@ struct GameState {
 
 fn main() {
     let mut game = Game::new();
-    game.run((GameState { health_left: 42 }));
+
+    // get your game stuff ready here
+
+    game.run(GameState { health_left: 42 });
 }
