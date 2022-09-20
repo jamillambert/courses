@@ -2,7 +2,7 @@ use rusty_engine::{
     game,
     prelude::{bevy::prelude::default, *},
 };
-use std::{time::SystemTime};
+use std::time::SystemTime;
 
 struct GameState {
     name: String,
@@ -48,32 +48,65 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         println!("Current score: {}, fps: {}", game_state.current_score, fps);
     }
     game_state.frame_no += 1;
-
-    // Handles collisions of the player car and collision objects
+    // Handles collisions of the player car
     for event in engine.collision_events.drain(..) {
-        if event.state == CollisionState::Begin && event.pair.one_starts_with("player") {
+        if event.state == CollisionState::Begin
+            && event.pair.one_starts_with("player")
+            && event.pair.one_starts_with("barrel")
+        {  // When the player hits a barrel they score 1 point and the barrel disappears
             for label in [event.pair.0, event.pair.1] {
-                if label != "player" {
+                if label.contains("barrel") {
                     engine.sprites.remove(&label);
                 }
-            } 
+            }
+            game_state.current_score += 1;
+            let score = engine.texts.get_mut("score").unwrap();
+            score.value = format!("Score: {}", game_state.current_score);
+            game_state.movement_speed += 50.0;
+            if game_state.current_score > game_state.high_score {
+                game_state.high_score = game_state.current_score;
+                let high_score = engine.texts.get_mut("high_score").unwrap();
+                high_score.value = format!("High Score: {}", game_state.high_score);
+            }
+        } else if event.state == CollisionState::Begin
+            && event.pair.one_starts_with("player")
+            && event.pair.one_starts_with("car")
+        { // When the player hits another car the game is over, resetting the score and position
+            let player = engine.sprites.get_mut("player").unwrap();
+            player.translation = Vec2::new(0.0, 0.0);
+            player.rotation = RIGHT;
+            game_state.current_score = 0;
+            let score = engine.texts.get_mut("score").unwrap();
+            score.value = format!("Score: {}", game_state.current_score);
+            game_state.movement_speed = 100.0;
         }
-        game_state.current_score += 1;
-        game_state.movement_speed += 50.0;
     }
 
-    // Handles keyboard movement
     let player = engine.sprites.get_mut("player").unwrap();
-    if engine.keyboard_state.pressed_any(&[KeyCode::Up, KeyCode::W]) {
+
+    // Handles keyboard movement
+    if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::Up, KeyCode::W])
+    {
         player.rotation = UP;
         player.translation.y += game_state.movement_speed * engine.delta_f32;
-    } else if engine.keyboard_state.pressed_any(&[KeyCode::Down, KeyCode::S]) {
-        player.rotation =  DOWN;
+    } else if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::Down, KeyCode::S])
+    {
+        player.rotation = DOWN;
         player.translation.y -= game_state.movement_speed * engine.delta_f32;
-    } else if engine.keyboard_state.pressed_any(&[KeyCode::Left, KeyCode::A]) {
+    } else if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::Left, KeyCode::A])
+    {
         player.rotation = LEFT;
         player.translation.x -= game_state.movement_speed * engine.delta_f32;
-    } else if engine.keyboard_state.pressed_any(&[KeyCode::Right, KeyCode::D]) {
+    } else if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::Right, KeyCode::D])
+    {
         player.rotation = RIGHT;
         player.translation.x += game_state.movement_speed * engine.delta_f32;
     }
@@ -96,11 +129,26 @@ fn main() {
     player.translation = Vec2::new(10.0, 10.0);
     player.rotation = RIGHT;
     player.collision = true;
-    // let player::speed = 100;
+
+    let score = game.add_text("score", "Score: 0");
+    score.translation = Vec2::new(-520.0, 320.0);
+
+    let high_score = game.add_text("high_score", "High Score: 0");
+    high_score.translation = Vec2::new(520.0, 320.0);
 
     let car1 = game.add_sprite("car1", SpritePreset::RacingCarYellow);
-    car1.translation = Vec2::new(300.0, 0.0);
+    car1.translation = Vec2::new(300.0, 150.0);
+    car1.collision = true;      
+    let car1 = game.add_sprite("car2", SpritePreset::RacingCarRed);
+    car1.translation = Vec2::new(-300.0, -150.0);
     car1.collision = true;
+    let car1 = game.add_sprite("car3", SpritePreset::RacingCarGreen);
+    car1.translation = Vec2::new(300.0, 150.0);
+    car1.collision = true;      
+    let car1 = game.add_sprite("car4", SpritePreset::RacingCarBlack);
+    car1.translation = Vec2::new(-300.0, -150.0);
+    car1.collision = true;
+
 
     game.add_logic(game_logic);
     game.run(GameState::default());
