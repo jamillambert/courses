@@ -1,4 +1,4 @@
-use rusty_engine::prelude::*;
+use rusty_engine::prelude::{bevy::prelude::default, *};
 
 struct GameState {
     name: String,
@@ -10,12 +10,24 @@ struct GameState {
 }
 
 impl Default for GameState {
+    fn default() -> Self {
+        Self {
+            name: "Player".to_string(),
+            health_left: 0,
+            high_score: 0,
+            current_score: 0,
+            enemy_labels: Vec::new(),
+            spawn_timer: Timer::from_seconds(1.0, false),
+        }
+    }
 }
 
 fn main() {
     let mut game = Game::new();
+    game.run(GameState::default());
+}
 
-    // get your game stuff ready here
-
-    game.run(GameState { health_left: 42 });
+fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
+    game_state.current_score += 1;
+    println!("Current score: {}", game_state.current_score);
 }
