@@ -2,7 +2,7 @@ use rusty_engine::{
     game,
     prelude::{bevy::prelude::default, *},
 };
-use std::{time::SystemTime, f32::consts::PI};
+use std::{time::SystemTime};
 
 struct GameState {
     name: String,
@@ -15,7 +15,7 @@ struct GameState {
     measure_time: SystemTime,
 
     movement_speed: f32,
-    movement_direction: f32,
+    barrel_index: i32, // index for spawned barrels any time the mouse is clicked
 }
 
 impl Default for GameState {
@@ -31,7 +31,7 @@ impl Default for GameState {
             measure_time: SystemTime::now(),
 
             movement_speed: 100.0,
-            movement_direction: 0.0,
+            barrel_index: 0,
         }
     }
 }
@@ -49,7 +49,7 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     }
     game_state.frame_no += 1;
 
-    // Handles collisions with the player
+    // Handles collisions of the player car and collision objects
     for event in engine.collision_events.drain(..) {
         if event.state == CollisionState::Begin && event.pair.one_starts_with("player") {
             for label in [event.pair.0, event.pair.1] {
@@ -57,24 +57,36 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
                     engine.sprites.remove(&label);
                 }
             } 
-            game_state.movement_direction += PI;
         }
+        game_state.current_score += 1;
+        game_state.movement_speed += 50.0;
     }
 
     // Handles keyboard movement
     let player = engine.sprites.get_mut("player").unwrap();
-    if engine.keyboard_state.pressed(KeyCode::Up) {
+    if engine.keyboard_state.pressed_any(&[KeyCode::Up, KeyCode::W]) {
         player.rotation = UP;
         player.translation.y += game_state.movement_speed * engine.delta_f32;
-    } else if engine.keyboard_state.pressed(KeyCode::Down) {
+    } else if engine.keyboard_state.pressed_any(&[KeyCode::Down, KeyCode::S]) {
         player.rotation =  DOWN;
         player.translation.y -= game_state.movement_speed * engine.delta_f32;
-    } else if engine.keyboard_state.pressed(KeyCode::Left) {
+    } else if engine.keyboard_state.pressed_any(&[KeyCode::Left, KeyCode::A]) {
         player.rotation = LEFT;
         player.translation.x -= game_state.movement_speed * engine.delta_f32;
-    } else if engine.keyboard_state.pressed(KeyCode::Right) {
+    } else if engine.keyboard_state.pressed_any(&[KeyCode::Right, KeyCode::D]) {
         player.rotation = RIGHT;
         player.translation.x += game_state.movement_speed * engine.delta_f32;
+    }
+
+    // Creates a barrel sprite at the mouse location when the left button is clicked
+    if engine.mouse_state.just_pressed(MouseButton::Left) {
+        if let Some(mouse_location) = engine.mouse_state.location() {
+            let label = format!("barrel{}", game_state.barrel_index);
+            game_state.barrel_index += 1;
+            let barrel = engine.add_sprite(label.clone(), SpritePreset::RacingBarrelRed);
+            barrel.translation = mouse_location;
+            barrel.collision = true;
+        }
     }
 }
 
