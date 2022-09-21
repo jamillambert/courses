@@ -1,7 +1,7 @@
 use log::{debug, error, info, trace, warn};
 use rand::prelude::*;
 use rusty_engine::prelude::*;
-use std::time::SystemTime;
+use std::{f32::consts::PI, time::SystemTime};
 
 struct GameState {
     high_score: i32,
@@ -12,7 +12,6 @@ struct GameState {
     barrel_index: i32,
     spawn_timer: Timer,
     move_timer: Timer,
-    number_cars: i32,
     max_barrels: i32,
 }
 
@@ -25,9 +24,8 @@ impl Default for GameState {
             measure_time: SystemTime::now(),
             movement_speed: 100.0,
             barrel_index: 0,
-            spawn_timer: Timer::from_seconds(2.0, true),
+            spawn_timer: Timer::from_seconds(1.0, true),
             move_timer: Timer::from_seconds(0.09, true),
-            number_cars: 4,
             max_barrels: 4,
         }
     }
@@ -126,28 +124,26 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
 
     // Move the car to the other side of the window when it hits the edge
     let player = engine.sprites.get_mut("player").unwrap();
-
-    if player.translation.x > engine.window_dimensions.x / 2.0 - 1.0 {
+    if player.translation.x > engine.window_dimensions.x / 2.0 {
         player.translation.x = -engine.window_dimensions.x / 2.0 + 10.0;
         debug!(
             "The car moved off the screen, moved to x = {}",
             player.translation.x
         );
-    } else if player.translation.x < -engine.window_dimensions.x / 2.0 + 1.0 {
+    } else if player.translation.x < -engine.window_dimensions.x / 2.0 {
         player.translation.x = engine.window_dimensions.x / 2.0 - 10.0;
         debug!(
             "The car moved off the screen, moved to x = {}",
             player.translation.x
         );
     }
-    if player.translation.y > engine.window_dimensions.y / 2.0 - 1.0 {
-        // player.translation.y = -engine.window_dimensions.y / 2.0 + 10.0;
-        player.translation.y = -350.0;
+    if player.translation.y > engine.window_dimensions.y / 2.0 {
+        player.translation.y = -engine.window_dimensions.y / 2.0 + 10.0;
         debug!(
             "The car moved off the top of the screen, moved to y = {}",
             player.translation.y
         );
-    } else if player.translation.y < -engine.window_dimensions.y / 2.0 + 1.0 {
+    } else if player.translation.y < -engine.window_dimensions.y / 2.0 {
         debug!(
             "The car moved off the screen, from y = {}",
             player.translation.y
@@ -160,10 +156,52 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     }
 
     // Handles keyboard movement
+    // first four cases are diagonal movement
     if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Up, KeyCode::W])
+        && engine
+            .keyboard_state
+            .pressed_any(&[KeyCode::Right, KeyCode::D])
     {
+        player.rotation = PI / 4.0;
+        player.translation.x += game_state.movement_speed * engine.delta_f32 / 1.4142;
+        player.translation.y += game_state.movement_speed * engine.delta_f32 / 1.4142;
+    } else if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::Up, KeyCode::W])
+        && engine
+            .keyboard_state
+            .pressed_any(&[KeyCode::Left, KeyCode::A])
+    {
+        player.rotation = PI * 3.0 / 4.0;
+        player.translation.x -= game_state.movement_speed * engine.delta_f32 / 1.4142;
+        player.translation.y += game_state.movement_speed * engine.delta_f32 / 1.4142;
+    } else if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::Down, KeyCode::S])
+        && engine
+            .keyboard_state
+            .pressed_any(&[KeyCode::Left, KeyCode::A])
+    {
+        player.rotation = PI * 5.0 / 4.0;
+        player.translation.x -= game_state.movement_speed * engine.delta_f32 / 1.4142;
+        player.translation.y -= game_state.movement_speed * engine.delta_f32 / 1.4142;
+    } else if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::Down, KeyCode::S])
+        && engine
+            .keyboard_state
+            .pressed_any(&[KeyCode::Right, KeyCode::D])
+    {
+        player.rotation = PI * 7.0 / 4.0;
+        player.translation.x += game_state.movement_speed * engine.delta_f32 / 1.4142;
+        player.translation.y -= game_state.movement_speed * engine.delta_f32 / 1.4142;
+    } else if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::Up, KeyCode::W])
+    {
+        // last four cases are orthogonal movement
         player.rotation = UP;
         player.translation.y += game_state.movement_speed * engine.delta_f32;
         if player.translation.y > engine.window_dimensions.y / 2.0 {
@@ -202,7 +240,7 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         let label = format!("barrel{}", game_state.barrel_index);
         let barrel = engine.add_sprite(label.clone(), SpritePreset::RacingBarrelRed);
         barrel.translation.x = thread_rng().gen_range(-x_range..x_range);
-        //barrel.translation.y = thread_rng().gen_range(-y_range..y_range);
+        barrel.translation.y = thread_rng().gen_range(-y_range..y_range);
         barrel.collision = true;
     }
 
@@ -243,12 +281,12 @@ fn main() {
     player.rotation = RIGHT;
     player.collision = true;
 
-    for i in 0..2 {
+    for i in 0..4 {
         // Creates 4 cars, one in each corner
         let label = format!("car{}", i);
         let car = game.add_sprite(label, SpritePreset::RacingCarYellow);
         let x_pos: i32 = (i / 2 * 2 - 1) * 300; // sets the positions to + and - 300
-        let y_pos: i32 = (i % 2 * 2 - 1) * 0; // sets the positions to + and - 150
+        let y_pos: i32 = (i % 2 * 2 - 1) * 150; // sets the positions to + and - 150
         car.translation = Vec2::new(x_pos as f32, y_pos as f32);
         car.collision = true;
     }
