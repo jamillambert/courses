@@ -11,8 +11,9 @@ struct GameState {
     movement_speed: f32,
     barrel_index: i32,
     spawn_timer: Timer,
-    move_timer: Timer,
     max_barrels: i32,
+    window_x: f32,
+    window_y: f32,
 }
 
 impl Default for GameState {
@@ -25,10 +26,54 @@ impl Default for GameState {
             movement_speed: 100.0,
             barrel_index: 0,
             spawn_timer: Timer::from_seconds(1.0, true),
-            move_timer: Timer::from_seconds(0.09, true),
             max_barrels: 4,
+            window_x: 0.0,
+            window_y: 0.0,
         }
     }
+}
+
+fn randomise_location(game_state: &mut GameState) -> (f32, f32) {
+    let max_x = game_state.window_x / 2.0 - 50.0;
+    let max_y = game_state.window_y / 2.0 - 50.0;
+    (
+        thread_rng().gen_range(-max_x..max_x),
+        thread_rng().gen_range(-max_y..max_y),
+    )
+}
+
+fn in_collision(engine: &mut Engine) -> Option<Vec<String>> {
+    // if there is a collision the two sprite labels are returned, player is always at 0 if involved
+    let mut labels = Vec::new();
+    for event in engine.collision_events.drain(..) {
+        debug!("{} is in collision with {}", event.pair.0, event.pair.1);
+        if event.state == CollisionState::Begin {
+            if event.pair.0 == "player" {
+                labels.push(String::from("player"));
+                labels.push(event.pair.1);
+            } else if event.pair.1 == "player" {
+                labels.push(String::from("player"));
+                labels.push(event.pair.0);
+            } else {
+                labels.push(event.pair.0);
+                labels.push(event.pair.1);
+            }
+            return Some(labels);
+        }
+    }
+    return None;
+}
+
+fn game_over(engine: &mut Engine, game_state: &mut GameState) {
+    info!("Game Over!");
+    engine.audio_manager.play_sfx(SfxPreset::Jingle3, 0.5);
+    let player = engine.sprites.get_mut("player").unwrap();
+    player.translation = Vec2::new(0.0, 0.0);
+    player.rotation = RIGHT;
+    game_state.current_score = 0;
+    let score = engine.texts.get_mut("score").unwrap();
+    score.value = format!("Score: {}", game_state.current_score);
+    game_state.movement_speed = 100.0;
 }
 
 fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
@@ -47,6 +92,8 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         );
     }
     game_state.frame_no += 1;
+    game_state.window_x = engine.window_dimensions.x;
+    game_state.window_y = engine.window_dimensions.y;
 
     // Move score text when the window is resized
     let score = engine.texts.get_mut("score").unwrap();
@@ -57,21 +104,13 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     high_score.translation.x = -engine.window_dimensions.x / 2.0 + 100.0;
     high_score.translation.y = engine.window_dimensions.y / 2.0 - 30.0;
 
-    // Handles collisions of the player car
-    for event in engine.collision_events.drain(..) {
-        debug!("{} is in collision with {}", event.pair.0, event.pair.1);
-        let player_col = event.pair.one_starts_with("player");
-        let barrel_col = event.pair.0.contains("barrel") || event.pair.1.contains("barrel");
-        let bad_col = event.pair.0.contains("car") || event.pair.1.contains("car") || event.pair.one_starts_with("bomb");
-        if event.state == CollisionState::Begin {
-            if player_col && barrel_col {
+    if let Some(labels) = in_collision(engine) {
+        // Handles collisions of the player car
+        if labels[0] == "player" {
+            if labels[1].contains("barrel") {
                 // When the player hits a barrel they score 1 point and the barrel disappears
                 info!("Player hit a barrel");
-                for label in [event.pair.0, event.pair.1] {
-                    if label.contains("barrel") {
-                        engine.sprites.remove(&label);
-                    }
-                }
+                engine.sprites.remove(&labels[1]);
                 game_state.current_score += 1;
                 let score = engine.texts.get_mut("score").unwrap();
                 score.value = format!("Score: {}", game_state.current_score);
@@ -85,44 +124,22 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
                 } else {
                     engine.audio_manager.play_sfx(SfxPreset::Minimize1, 0.5);
                 }
-            } else if player_col && bad_col {
-                // When the player hits another car or a bomb the game is over, resetting the score and position
-                info!("Game Over!");
-                engine.audio_manager.play_sfx(SfxPreset::Jingle3, 0.5);
-                let player = engine.sprites.get_mut("player").unwrap();
-                player.translation = Vec2::new(0.0, 0.0);
-                player.rotation = RIGHT;
-                game_state.current_score = 0;
-                let score = engine.texts.get_mut("score").unwrap();
-                score.value = format!("Score: {}", game_state.current_score);
-                game_state.movement_speed = 100.0;
-                if event.pair.one_starts_with("bomb") {
-                    engine.sprites.remove("bomb");
-                }
-            } else {
-                // When a barrel is in a colision with another NPC sprite it is moved
-                debug!("Two NPC sprites collided");
-                let x_range = engine.window_dimensions.x.clone() / 2.0 - 50.0;
-                let y_range = engine.window_dimensions.y / 2.0 - 50.0;
-                let label: String;
-                if event.pair.0.contains("barrel") {
-                    // Move the barrel not the car, if there are 2 barrels the fist is moved
-                    label = event.pair.0.clone();
-                } else {
-                    label = event.pair.1.clone();
-                }
-                let barrel_opt = engine.sprites.get_mut(&label);
-                if barrel_opt.is_some() {
-                    debug!("The sprite {} was moved", label);
-                    let barrel = barrel_opt.unwrap();
-                    barrel.translation.x = thread_rng().gen_range(-x_range..x_range);
-                    barrel.translation.y = thread_rng().gen_range(-y_range..y_range);
-                } else {
-                    warn!(target: "game_logic::collision_events", "Error could not move barrel when {} is in collision with {}", event.pair.0, event.pair.1);
-                }
-                break;
+            } else if labels[1].contains("car") {
+                // When the player hits another car the game is over, resetting the score and position
+                game_over(engine, game_state);
+            } else if labels[1].contains("bomb") {
+                // When the player hits a bomb it is remived and the game is over, resetting the score and position
+                engine.sprites.remove(&labels[1]);
+                game_over(engine, game_state);
             }
-        }
+        } else if labels[0].contains("b") {
+            // if a barrel or bomb was spawned in collision with an NPC it is moved
+            let sprite = engine.sprites.get_mut(&labels[0]).unwrap();
+            (sprite.translation.x, sprite.translation.y) = randomise_location(game_state);
+        } else if labels[1].contains("b"){
+            let sprite = engine.sprites.get_mut(&labels[1]).unwrap();
+            (sprite.translation.x, sprite.translation.y) = randomise_location(game_state);
+        } 
     }
 
     // Move the car to the other side of the window when it hits the edge
@@ -231,55 +248,27 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     // a maximum number of barrels are created and then exisiting ones are moved
     if game_state.spawn_timer.tick(engine.delta).just_finished() {
         engine.audio_manager.play_sfx(SfxPreset::Click, 1.0);
-        let x_range = engine.window_dimensions.x / 2.0 - 50.0;
-        let y_range = engine.window_dimensions.y / 2.0 - 50.0;
+        let label: String;
+        let sprite_png: rusty_engine::sprite::SpritePreset;
         if game_state.barrel_index > game_state.max_barrels {
             game_state.barrel_index = 0;
-            let bomb = engine.add_sprite("bomb", SpritePreset::RacingBarrelRed);
-            bomb.collision = true;
-            bomb.translation.x = thread_rng().gen_range(-x_range..x_range);
-            bomb.translation.y = thread_rng().gen_range(-y_range..y_range);
-            
+            label = String::from("bomb");
+            sprite_png = SpritePreset::RacingBarrelRed;
         } else {
             game_state.barrel_index += 1;
-            let label = format!("barrel{}", game_state.barrel_index);
-            let barrel = engine.add_sprite(label.clone(), SpritePreset::RacingBarrelBlue);
-            barrel.translation.x = thread_rng().gen_range(-x_range..x_range);
-            barrel.translation.y = thread_rng().gen_range(-y_range..y_range);
-            barrel.collision = true;
+            label = format!("barrel{}", game_state.barrel_index);
+            sprite_png = SpritePreset::RacingBarrelBlue;
         }
+        let sprite = engine.add_sprite(&label, sprite_png);
+        sprite.collision = true;
+        (sprite.translation.x, sprite.translation.y) = randomise_location(game_state);
     }
 
-    // NPC cars move each tick of the move_timer
-    // if game_state.move_timer.tick(engine.delta).just_finished() {
-    //     for i in 0..game_state.number_cars {
-    //         let label = format!("car{}", i);
-    //         let car_opt = engine.sprites.get_mut(&label);
-    //         if car_opt.is_some() {
-    //             let car = car_opt.unwrap();
-    //             let x_range = engine.window_dimensions.x / 2.0 - 50.0;
-    //             let y_range = engine.window_dimensions.y / 2.0 - 50.0;
-    //             let x_move = thread_rng().gen_range(-10..10) as f32;
-    //             let y_move = thread_rng().gen_range(-10..10) as f32;
-    //             if (car.translation.x + x_move).abs() < x_range {
-    //                 car.translation.x += x_move;
-    //             } else {
-    //                 car.translation.x -= x_move;
-    //             }
-    //             if (car.translation.y + y_move).abs() < y_range {
-    //                 car.translation.y += y_move;
-    //             } else {
-    //                 car.translation.y -= y_move;
-    //             }
-    //         } else {
-    //             warn!(target: "game_logic::move", "Error could not move NPC car {}", label);
-    //         }
-    //     }
-    // }
 }
 
 fn main() {
     let mut game = Game::new();
+    let game_state = GameState::default();
 
     // Set up of initial sprites and scoreboard
     let player = game.add_sprite("player", SpritePreset::RacingCarBlue);
@@ -307,5 +296,5 @@ fn main() {
     game.audio_manager
         .play_music(MusicPreset::WhimsicalPopsicle, 0.1);
     game.add_logic(game_logic);
-    game.run(GameState::default());
+    game.run(game_state);
 }
