@@ -62,7 +62,7 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         debug!("{} is in collision with {}", event.pair.0, event.pair.1);
         let player_col = event.pair.one_starts_with("player");
         let barrel_col = event.pair.0.contains("barrel") || event.pair.1.contains("barrel");
-        let car_col = event.pair.0.contains("car") || event.pair.1.contains("car");
+        let bad_col = event.pair.0.contains("car") || event.pair.1.contains("car") || event.pair.one_starts_with("bomb");
         if event.state == CollisionState::Begin {
             if player_col && barrel_col {
                 // When the player hits a barrel they score 1 point and the barrel disappears
@@ -85,8 +85,8 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
                 } else {
                     engine.audio_manager.play_sfx(SfxPreset::Minimize1, 0.5);
                 }
-            } else if player_col && car_col {
-                // When the player hits another car the game is over, resetting the score and position
+            } else if player_col && bad_col {
+                // When the player hits another car or a bomb the game is over, resetting the score and position
                 info!("Game Over!");
                 engine.audio_manager.play_sfx(SfxPreset::Jingle3, 0.5);
                 let player = engine.sprites.get_mut("player").unwrap();
@@ -96,6 +96,9 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
                 let score = engine.texts.get_mut("score").unwrap();
                 score.value = format!("Score: {}", game_state.current_score);
                 game_state.movement_speed = 100.0;
+                if event.pair.one_starts_with("bomb") {
+                    engine.sprites.remove("bomb");
+                }
             } else {
                 // When a barrel is in a colision with another NPC sprite it is moved
                 debug!("Two NPC sprites collided");
@@ -204,9 +207,6 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         // last four cases are orthogonal movement
         player.rotation = UP;
         player.translation.y += game_state.movement_speed * engine.delta_f32;
-        if player.translation.y > engine.window_dimensions.y / 2.0 {
-            player.translation.y = -engine.window_dimensions.y;
-        }
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Down, KeyCode::S])
@@ -235,13 +235,19 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         let y_range = engine.window_dimensions.y / 2.0 - 50.0;
         if game_state.barrel_index > game_state.max_barrels {
             game_state.barrel_index = 0;
+            let bomb = engine.add_sprite("bomb", SpritePreset::RacingBarrelRed);
+            bomb.collision = true;
+            bomb.translation.x = thread_rng().gen_range(-x_range..x_range);
+            bomb.translation.y = thread_rng().gen_range(-y_range..y_range);
+            
+        } else {
+            game_state.barrel_index += 1;
+            let label = format!("barrel{}", game_state.barrel_index);
+            let barrel = engine.add_sprite(label.clone(), SpritePreset::RacingBarrelBlue);
+            barrel.translation.x = thread_rng().gen_range(-x_range..x_range);
+            barrel.translation.y = thread_rng().gen_range(-y_range..y_range);
+            barrel.collision = true;
         }
-        game_state.barrel_index += 1;
-        let label = format!("barrel{}", game_state.barrel_index);
-        let barrel = engine.add_sprite(label.clone(), SpritePreset::RacingBarrelRed);
-        barrel.translation.x = thread_rng().gen_range(-x_range..x_range);
-        barrel.translation.y = thread_rng().gen_range(-y_range..y_range);
-        barrel.collision = true;
     }
 
     // NPC cars move each tick of the move_timer
