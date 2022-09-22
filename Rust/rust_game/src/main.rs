@@ -1,4 +1,4 @@
-use log::{debug, error, info, trace, warn};
+use log::{debug, info};
 use rand::prelude::*;
 use rusty_engine::prelude::*;
 use std::{f32::consts::PI, time::SystemTime};
