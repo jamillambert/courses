@@ -74,7 +74,7 @@ fn reset_game(engine: &mut Engine, game_state: &mut GameState) {
     // Set up of player
     engine.sprites.clear();
     let player = engine.add_sprite("player", SpritePreset::RacingCarBlue);
-    player.translation = Vec2::new(10.0, 10.0);
+    player.translation = Vec2::new(0.0, 0.0);
     player.rotation = RIGHT;
     player.collision = true;
 
