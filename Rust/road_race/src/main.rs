@@ -4,10 +4,10 @@ use rand::prelude::*;
 use rusty_engine::prelude::*;
 use std::{f32::consts::PI, time::SystemTime};
 
-const TURN_SPEED: f32 = 0.3;
-const PLAYER_SPEED: f32 = 1.0;
-const MAX_TURN: f32 = 6.0;
-const MAX_SPEED: f32 = 200.0;
+const TURN_SPEED: f32 = 0.5;
+const PLAYER_SPEED: f32 = 100.0;
+const MAX_TURN: f32 = 10.0;
+const MAX_SPEED: f32 = 700.0;
 
 struct GameState {
     health_amount: u8,
@@ -136,31 +136,37 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         if game_state.direction < MAX_TURN {
             game_state.direction += TURN_SPEED;
         }
+        if game_state.movement_speed > 100.0 {
+        game_state.movement_speed -= 5.0;
+        }
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Down, KeyCode::S])
     {
-        if game_state.direction > MAX_TURN {
+        if game_state.direction > -MAX_TURN {
             game_state.direction -= TURN_SPEED;
+        }
+        if game_state.movement_speed > 100.0 {
+        game_state.movement_speed -= 5.0;
         }
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Left, KeyCode::A])
     {
         if game_state.movement_speed > 0.0 {
-        game_state.movement_speed -= PLAYER_SPEED;
+        game_state.movement_speed -= 10.0;
         }
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Right, KeyCode::D])
     {        
         if game_state.movement_speed < MAX_SPEED {
-        game_state.movement_speed +=  PLAYER_SPEED;
+        game_state.movement_speed +=  10.0;
         }
     }
     let mut player = engine.sprites.get_mut("player").unwrap();
     player.rotation = game_state.direction * 0.1;
-    player.translation.y += game_state.direction * game_state.movement_speed * engine.delta_f32;
+    player.translation.y += game_state.direction * engine.delta_f32 * game_state.movement_speed / MAX_TURN;
     loop_motion(&mut player, game_state);
 
     let player_text = engine.texts.get_mut("player").unwrap();
