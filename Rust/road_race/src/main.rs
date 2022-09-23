@@ -137,7 +137,7 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
             game_state.direction += TURN_SPEED;
         }
         if game_state.movement_speed > 100.0 {
-        game_state.movement_speed -= 5.0;
+        game_state.movement_speed -= game_state.direction;
         }
     } else if engine
         .keyboard_state
@@ -147,14 +147,14 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
             game_state.direction -= TURN_SPEED;
         }
         if game_state.movement_speed > 100.0 {
-        game_state.movement_speed -= 5.0;
+        game_state.movement_speed -= game_state.direction;
         }
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Left, KeyCode::A])
-    {
-        if game_state.movement_speed > 0.0 {
-        game_state.movement_speed -= 10.0;
+    {   
+        if game_state.movement_speed >= 10.0 {
+        game_state.movement_speed -=  10.0;
         }
     } else if engine
         .keyboard_state
