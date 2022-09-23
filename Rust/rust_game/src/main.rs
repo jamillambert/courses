@@ -19,7 +19,7 @@ struct GameState {
 impl Default for GameState {
     fn default() -> Self {
         Self {
-            high_score: 0,
+            high_score: 10,
             current_score: 0,
             frame_no: 0,
             measure_time: SystemTime::now(),
@@ -34,6 +34,7 @@ impl Default for GameState {
 }
 
 fn randomise_location(game_state: &mut GameState) -> (f32, f32) {
+    // Returns a random location within the game screen, away 50 from the edges
     let max_x = game_state.window_x / 2.0 - 50.0;
     let max_y = game_state.window_y / 2.0 - 50.0;
     (
@@ -43,7 +44,8 @@ fn randomise_location(game_state: &mut GameState) -> (f32, f32) {
 }
 
 fn in_collision(engine: &mut Engine) -> Option<Vec<String>> {
-    // if there is a collision the two sprite labels are returned, player is always at 0 if involved
+    // If there is a collision the two sprite labels are returned, player is always 
+    // at location 0 if involved
     let mut labels = Vec::new();
     for event in engine.collision_events.drain(..) {
         debug!("{} is in collision with {}", event.pair.0, event.pair.1);
@@ -65,6 +67,8 @@ fn in_collision(engine: &mut Engine) -> Option<Vec<String>> {
 }
 
 fn game_over(engine: &mut Engine, game_state: &mut GameState) {
+    // When the game is over the score is reset to 0 and the player is moved
+    // back to the centre of the screen and the movement speed reset
     info!("Game Over!");
     engine.audio_manager.play_sfx(SfxPreset::Jingle3, 0.5);
     let player = engine.sprites.get_mut("player").unwrap();
@@ -247,7 +251,7 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     // Creates a barrel after Timer has run and sets it to a random position on the screen
     // a maximum number of barrels are created and then exisiting ones are moved
     if game_state.spawn_timer.tick(engine.delta).just_finished() {
-        engine.audio_manager.play_sfx(SfxPreset::Click, 1.0);
+        engine.audio_manager.play_sfx(SfxPreset::Click, 0.5);
         let label: String;
         let sprite_png: rusty_engine::sprite::SpritePreset;
         if game_state.barrel_index > game_state.max_barrels {
@@ -269,8 +273,7 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
 fn main() {
     let mut game = Game::new();
     let game_state = GameState::default();
-
-    // Set up of initial sprites and scoreboard
+// Set up of initial sprites and scoreboard
     let player = game.add_sprite("player", SpritePreset::RacingCarBlue);
     player.translation = Vec2::new(10.0, 10.0);
     player.rotation = RIGHT;
@@ -289,7 +292,7 @@ fn main() {
     let score = game.add_text("score", "Score: 0");
     score.translation = Vec2::new(-520.0, 320.0);
 
-    let high_score = game.add_text("high_score", "High Score: 0");
+    let high_score = game.add_text("high_score", format!("High Score: {}", game_state.high_score));
     high_score.translation = Vec2::new(520.0, 320.0);
 
     // Play music and run the game
