@@ -71,7 +71,7 @@ fn reset_game(engine: &mut Engine, game_state: &mut GameState) {
     // and the player is moved back to the centre of the screen and
     // the movement speed reset
 
-    // Set up of player and scoreboard
+    // Set up of player
     engine.sprites.clear();
     let player = engine.add_sprite("player", SpritePreset::RacingCarBlue);
     player.translation = Vec2::new(10.0, 10.0);
@@ -298,10 +298,7 @@ fn main() {
     let score = game.add_text("score", "Score: 0");
     score.translation = Vec2::new(-520.0, 320.0);
 
-    let high_score = game.add_text(
-        "high_score",
-        format!("High Score: {}", game_state.high_score),
-    );
+    let high_score = game.add_text("high_score", format!("High Score: {}", game_state.high_score));
     high_score.translation = Vec2::new(520.0, 320.0);
 
     // Play music and run the game
