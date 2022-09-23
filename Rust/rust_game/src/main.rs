@@ -44,7 +44,7 @@ fn randomise_location(game_state: &mut GameState) -> (f32, f32) {
 }
 
 fn in_collision(engine: &mut Engine) -> Option<Vec<String>> {
-    // If there is a collision the two sprite labels are returned, player is always 
+    // If there is a collision the two sprite labels are returned, player is always
     // at location 0 if involved
     let mut labels = Vec::new();
     for event in engine.collision_events.drain(..) {
@@ -66,14 +66,25 @@ fn in_collision(engine: &mut Engine) -> Option<Vec<String>> {
     return None;
 }
 
-fn game_over(engine: &mut Engine, game_state: &mut GameState) {
+fn reset_game(engine: &mut Engine, game_state: &mut GameState) {
     // When the game is over the score is reset to 0 and the player is moved
     // back to the centre of the screen and the movement speed reset
-    info!("Game Over!");
-    engine.audio_manager.play_sfx(SfxPreset::Jingle3, 0.5);
-    let player = engine.sprites.get_mut("player").unwrap();
-    player.translation = Vec2::new(0.0, 0.0);
+    // Set up of player and scoreboard
+    engine.sprites.clear();
+    let player = engine.add_sprite("player", SpritePreset::RacingCarBlue);
+    player.translation = Vec2::new(10.0, 10.0);
     player.rotation = RIGHT;
+    player.collision = true;
+
+    // Creates 4 cars, one in each corner
+    for i in 0..4 {
+        let label = format!("car{}", i);
+        let car = engine.add_sprite(label, SpritePreset::RacingCarYellow);
+        let x_pos: i32 = (i / 2 * 2 - 1) * 300; // sets the positions to + and - 300
+        let y_pos: i32 = (i % 2 * 2 - 1) * 150; // sets the positions to + and - 150
+        car.translation = Vec2::new(x_pos as f32, y_pos as f32);
+        car.collision = true;
+    }
     game_state.current_score = 0;
     let score = engine.texts.get_mut("score").unwrap();
     score.value = format!("Score: {}", game_state.current_score);
@@ -82,6 +93,9 @@ fn game_over(engine: &mut Engine, game_state: &mut GameState) {
 
 fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     // Show current fps
+    if game_state.frame_no == 0 {
+        reset_game(engine, game_state);
+    }
     if game_state.frame_no % 100 == 0 {
         let player = engine.sprites.get_mut("player").unwrap();
         let new_time = SystemTime::now();
@@ -129,21 +143,20 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
                     engine.audio_manager.play_sfx(SfxPreset::Minimize1, 0.5);
                 }
             } else if labels[1].contains("car") {
-                // When the player hits another car the game is over, resetting the score and position
-                game_over(engine, game_state);
-            } else if labels[1].contains("bomb") {
-                // When the player hits a bomb it is remived and the game is over, resetting the score and position
-                engine.sprites.remove(&labels[1]);
-                game_over(engine, game_state);
+                // When the player hits another car or a bomb the game is over,
+                // resetting the score and position
+                engine.audio_manager.play_sfx(SfxPreset::Jingle3, 0.5);
+                info!("Game Over!");
+                reset_game(engine, game_state);
             }
         } else if labels[0].contains("b") {
             // if a barrel or bomb was spawned in collision with an NPC it is moved
             let sprite = engine.sprites.get_mut(&labels[0]).unwrap();
             (sprite.translation.x, sprite.translation.y) = randomise_location(game_state);
-        } else if labels[1].contains("b"){
+        } else if labels[1].contains("b") {
             let sprite = engine.sprites.get_mut(&labels[1]).unwrap();
             (sprite.translation.x, sprite.translation.y) = randomise_location(game_state);
-        } 
+        }
     }
 
     // Move the car to the other side of the window when it hits the edge
@@ -267,32 +280,19 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         sprite.collision = true;
         (sprite.translation.x, sprite.translation.y) = randomise_location(game_state);
     }
-
 }
 
 fn main() {
     let mut game = Game::new();
     let game_state = GameState::default();
-// Set up of initial sprites and scoreboard
-    let player = game.add_sprite("player", SpritePreset::RacingCarBlue);
-    player.translation = Vec2::new(10.0, 10.0);
-    player.rotation = RIGHT;
-    player.collision = true;
-
-    for i in 0..4 {
-        // Creates 4 cars, one in each corner
-        let label = format!("car{}", i);
-        let car = game.add_sprite(label, SpritePreset::RacingCarYellow);
-        let x_pos: i32 = (i / 2 * 2 - 1) * 300; // sets the positions to + and - 300
-        let y_pos: i32 = (i % 2 * 2 - 1) * 150; // sets the positions to + and - 150
-        car.translation = Vec2::new(x_pos as f32, y_pos as f32);
-        car.collision = true;
-    }
 
     let score = game.add_text("score", "Score: 0");
     score.translation = Vec2::new(-520.0, 320.0);
 
-    let high_score = game.add_text("high_score", format!("High Score: {}", game_state.high_score));
+    let high_score = game.add_text(
+        "high_score",
+        format!("High Score: {}", game_state.high_score),
+    );
     high_score.translation = Vec2::new(520.0, 320.0);
 
     // Play music and run the game
