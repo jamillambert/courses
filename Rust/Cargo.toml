@@ -1,2 +1,0 @@
-[workspace]
-members = [ "road_race", "rust_game",  ]
