@@ -66,33 +66,11 @@ fn reset_game(engine: &mut Engine, game_state: &mut GameState) {
 fn loop_motion(sprite: &mut Sprite, game_state: &mut GameState) {
     if sprite.translation.x > game_state.window_x / 2.0 + 1.0 {
         sprite.translation.x = -game_state.window_x / 2.0;
-        debug!(
-            "The car moved off the screen, moved to x = {}",
-            sprite.translation.x
-        );
     } else if sprite.translation.x < -game_state.window_x / 2.0 - 1.0 {
         sprite.translation.x = game_state.window_x / 2.0;
-        debug!(
-            "The car moved off the screen, moved to x = {}",
-            sprite.translation.x
-        );
     }
-    if sprite.translation.y > game_state.window_y / 2.0 {
-        sprite.translation.y = -game_state.window_y / 2.0;
-        debug!(
-            "The car moved off the top of the screen, moved to y = {}",
-            sprite.translation.y
-        );
-    } else if sprite.translation.y < -game_state.window_y / 2.0 {
-        debug!(
-            "The car moved off the screen, from y = {}",
-            sprite.translation.y
-        );
-        sprite.translation.y = game_state.window_y / 2.0;
-        debug!(
-            "The car moved off the screen, moved to y = {}",
-            sprite.translation.y
-        );
+    if sprite.translation.y.abs() > game_state.window_y / 2.0 {
+        game_state.direction *= -1.0;
     }
 }
 
