@@ -41,7 +41,9 @@ impl Default for GameState {
 fn reset_game(engine: &mut Engine, game_state: &mut GameState) {
     engine.sprites.clear();
     let player = engine.add_sprite("player", SpritePreset::RacingCarBlue);
-    player.translation = Vec2::new(0.0, -500.0); 
+    let x = -game_state.window_x / 2.0 + 80.0;
+    let y = 0.0;
+    player.translation = Vec2::new(x, y); 
     player.layer = 50.0;
     player.rotation = RIGHT;
     player.collision = true;
@@ -49,6 +51,8 @@ fn reset_game(engine: &mut Engine, game_state: &mut GameState) {
 
 fn game_logic(engine: &mut Engine, game_state: &mut GameState) {    
     if game_state.frame_no == 0 {
+        game_state.window_x = engine.window_dimensions.x;
+        game_state.window_y = engine.window_dimensions.y;
         reset_game(engine, game_state);
     }
     game_state.frame_no += 1;    
