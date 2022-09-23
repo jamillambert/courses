@@ -67,8 +67,10 @@ fn in_collision(engine: &mut Engine) -> Option<Vec<String>> {
 }
 
 fn reset_game(engine: &mut Engine, game_state: &mut GameState) {
-    // When the game is over the score is reset to 0 and the player is moved
-    // back to the centre of the screen and the movement speed reset
+    // When the game first starts or is over the score is reset to 0
+    // and the player is moved back to the centre of the screen and
+    // the movement speed reset
+
     // Set up of player and scoreboard
     engine.sprites.clear();
     let player = engine.add_sprite("player", SpritePreset::RacingCarBlue);
@@ -85,6 +87,8 @@ fn reset_game(engine: &mut Engine, game_state: &mut GameState) {
         car.translation = Vec2::new(x_pos as f32, y_pos as f32);
         car.collision = true;
     }
+
+    // Set the current score to 0 and speed to 100
     game_state.current_score = 0;
     let score = engine.texts.get_mut("score").unwrap();
     score.value = format!("Score: {}", game_state.current_score);
@@ -110,17 +114,22 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         );
     }
     game_state.frame_no += 1;
-    game_state.window_x = engine.window_dimensions.x;
-    game_state.window_y = engine.window_dimensions.y;
+    if game_state.window_x != engine.window_dimensions.x
+        || game_state.window_y != engine.window_dimensions.y
+    {
+        // The window was resized
+        game_state.window_x = engine.window_dimensions.x;
+        game_state.window_y = engine.window_dimensions.y;
 
-    // Move score text when the window is resized
-    let score = engine.texts.get_mut("score").unwrap();
-    score.translation.x = engine.window_dimensions.x / 2.0 - 80.0;
-    score.translation.y = engine.window_dimensions.y / 2.0 - 30.0;
+        // Move score text when the window is resized 
+        let score = engine.texts.get_mut("score").unwrap();
+        score.translation.x = engine.window_dimensions.x / 2.0 - 80.0;
+        score.translation.y = engine.window_dimensions.y / 2.0 - 30.0;
 
-    let high_score = engine.texts.get_mut("high_score").unwrap();
-    high_score.translation.x = -engine.window_dimensions.x / 2.0 + 100.0;
-    high_score.translation.y = engine.window_dimensions.y / 2.0 - 30.0;
+        let high_score = engine.texts.get_mut("high_score").unwrap();
+        high_score.translation.x = -engine.window_dimensions.x / 2.0 + 100.0;
+        high_score.translation.y = engine.window_dimensions.y / 2.0 - 30.0;
+    }
 
     if let Some(labels) = in_collision(engine) {
         // Handles collisions of the player car
