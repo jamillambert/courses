@@ -41,7 +41,8 @@ impl Default for GameState {
 fn reset_game(engine: &mut Engine, game_state: &mut GameState) {
     engine.sprites.clear();
     let player = engine.add_sprite("player", SpritePreset::RacingCarBlue);
-    player.translation = Vec2::new(0.0, -500.0);
+    player.translation = Vec2::new(0.0, -500.0); 
+    player.layer = 50.0;
     player.rotation = RIGHT;
     player.collision = true;
 }
