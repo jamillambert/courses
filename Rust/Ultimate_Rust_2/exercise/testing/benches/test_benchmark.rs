@@ -6,7 +6,7 @@ pub fn test_benchmark(c: &mut Criterion) {
     //     b.iter(|| sploosh(black_box(3), black_box(5), black_box(100)))
     // });
     c.bench_function("fizz_buzz", |b| {
-        b.iter(|| fizz_buzz(3, 5, 100))
+        b.iter(|| fizz_buzz(black_box(3), black_box(5), black_box(100)))
     });
 }
 
