@@ -1,8 +1,7 @@
 from time import pthread_getcpuclockid
-
-
-print("What city did you grow up in?") 
-name = input()
-print("What is your pets name?")
-pet = input()
-print("Your band name could be: " + name + " " + pet)
+year = 2022
+ 
+if (year % 4 == 0 & year % 100 != 0) | (year % 400 == 0):
+    print("leap year")
+else:
+    print("not a leap year")
