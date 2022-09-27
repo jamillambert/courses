@@ -1,7 +1,8 @@
-from time import pthread_getcpuclockid
-year = 2022
- 
-if (year % 4 == 0 & year % 100 != 0) | (year % 400 == 0):
-    print("leap year")
-else:
-    print("not a leap year")
+while True:
+    year = input("Enter the year to check if it is a leap year (x to exit): ")
+    if year == 'x':
+        break
+    if (int(year) % 4 == 0 & int(year) % 100 != 0) | (int(year) % 400 == 0):
+        print(f'{year} is a leap year')
+    else:
+        print(f'{year} is not a leap year')
