@@ -1,7 +1,5 @@
 import os
 import random
-from tkinter import E
-
 
 rock = '''
     _______
