@@ -1,6 +1,15 @@
+''' 
+A rock paper scissors command line game
+The computer's choice is random and a running total is
+kept for all games played
+
+Jamil Lambert 2022
+'''
+
 import os
 import random
 
+# Provided text images below from 100 days of python 
 rock = '''
     _______
 ---'   ____)
@@ -29,8 +38,8 @@ scissors = '''
 '''
 
 error = "\nInput not recognised\n"
-#Write your code below this line 👇
 
+# variables to store the choices and wins
 choices = ['r', 'p', 's']
 pictures = {
     'r' : rock,
@@ -39,6 +48,7 @@ pictures = {
 }
 wins = [0, 0]
 os.system('cls||clear')
+
 while True:
     result = 'e' # The result of the game, 'e' is for an error in the input
     player = input("Choose Rock 'r' Paper 'p' or Scissors 's', or 'x' to exit: ").lower()
@@ -53,7 +63,7 @@ while True:
     # Print out the text picture from above for the computer's choice        
     print("Computer" + pictures.get(computer, error))
 
-    # Check who wins
+    # Check who wins, all 9 combinations written out for clarity
     if player == 'r':
         if computer == 'r':
             result='d'
