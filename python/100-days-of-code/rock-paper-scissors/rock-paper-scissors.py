@@ -1,5 +1,6 @@
 import os
 import random
+from tkinter import E
 
 
 rock = '''
@@ -29,33 +30,32 @@ scissors = '''
 ---.__(___)
 '''
 
+error = "\nInput not recognised\n"
 #Write your code below this line 👇
 
 choices = ['r', 'p', 's']
+pictures = {
+    'r' : rock,
+    'p' : paper,
+    's' : scissors
+}
 wins = [0, 0]
 os.system('cls||clear')
 while True:
-    result = 'e'
+    result = 'e' # The result of the game, 'e' is for an error in the input
     player = input("Choose Rock 'r' Paper 'p' or Scissors 's', or 'x' to exit: ").lower()
-    os.system('cls||clear')
-    if player ==  'r':
-        print(f"You choose: {rock}")
-    elif player ==  'p':
-        print(f"You choose: {paper}")
-    elif player ==  's':
-        print(f"You choose: {scissors}")
-    elif player ==  'x':
+    if player == 'x':
         break
-    else:
-        result == 'e'
-    print('\nComputer chooses:')
-    computer = choices[random.randint(0, 2)]
-    if computer == 'r':
-        print(rock)
-    elif computer == 'p':
-        print(paper)
-    elif computer == 's':
-        print(scissors)
+    os.system('cls||clear')
+
+    # Print out the text picture from above for the player's choice
+    print("Player:" + pictures.get(player, error))
+
+    computer = choices[random.randint(0, 2)] # computer's random choice
+    # Print out the text picture from above for the computer's choice        
+    print("Computer" + pictures.get(computer, error))
+
+    # Check who wins
     if player == 'r':
         if computer == 'r':
             result='d'
@@ -77,6 +77,8 @@ while True:
             result='w'
         elif computer == 's':
             result = 'd'
+
+    # Print out the result, add to the running score and print it too
     if result == 'w':
         print('\033[92m' + "You WIN!!" + '\033[0m')
         wins[0] += 1
