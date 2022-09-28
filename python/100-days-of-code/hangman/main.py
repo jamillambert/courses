@@ -27,7 +27,7 @@ while True:
     # Loops until the player chooses to exit the game
     os.system('cls||clear')
     print(logo)
-    print(stages[lives])
+    print(stages[lives]) # The hangman drawing that adds a section each time a wrong letter is chosen
     print(' '.join(answer) + "\n")
     if '_' not in answer or lives == 0:
         # The game is over and is reset
@@ -48,10 +48,14 @@ while True:
             running_text = "Welcome to hangman, choose your first letter (or type 'exit')\n"
             continue
         else:
-            print("\n")
+            print("\n\nThanks for playing, bye\n\n")
             break
+    
+    # Display the running text and ask the player to input a letter
     letter = input(running_text).lower()
     if letter == 'exit':
+        print("\nSorry you have lost, due to being a quitter\n")
+        print("The word was: " + word + "\n\nBye\n")
         break
     elif len(letter) != 1:
         # A single letter was not input
