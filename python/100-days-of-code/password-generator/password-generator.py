@@ -17,11 +17,11 @@ pass_list = []
 pass_string = ''
 
 for i in range(0, nr_letters):
-    pass_list += letters[random.randint(0, len(letters)-1)]
+    pass_list += random.choice(letters)
 for i in range(0, nr_symbols):
-    pass_list += symbols[random.randint(0, len(symbols)-1)]
+    pass_list += random.choice(symbols)
 for i in range(0, nr_numbers):
-    pass_list += numbers[random.randint(0, len(numbers)-1)]
+    pass_list += random.choice(numbers)
 
 random.shuffle(pass_list)
 for char in pass_list:
