@@ -49,7 +49,6 @@ while True:
             continue
         else:
             break
-    print(word)
     letter = input(running_text).lower()
     if letter == 'exit':
         break
