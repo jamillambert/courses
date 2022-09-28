@@ -19,7 +19,7 @@ import random
 # A random word from the list stored in hangman_words.py is chosen
 word = random.choice(word_list)
 answer = ['_'] * len(word)
-lives = len(stages)
+lives = len(stages)-1
 previous_choices = ['']
 running_text = 'Welcome to hangman, choose your first letter (or type exit)\n'
 
@@ -27,7 +27,7 @@ while True:
     # Loops until the player chooses to exit the game
     os.system('cls||clear')
     print(logo)
-    print(stages[lives-1])
+    print(stages[lives])
     print(' '.join(answer) + "\n")
     if '_' not in answer or lives == 0:
         # The game is over and is reset
@@ -37,7 +37,7 @@ while True:
         else:
             # No more lives left so the player has lost
             print("\nSorry you have lost, try again\n")
-            print("The word was: " + word)
+            print("The word was: " + word +  "\n")
         letter = input("Do you want to play again? (y/n) ")
         if letter == 'y':
             # A new work is chosen and the answer and live variables are reset
