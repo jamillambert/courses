@@ -37,7 +37,7 @@ def finite_pow(x, exponent, prime):
     return pow(x, n, prime)
 
 
-def encrypt_decrypt(text, code):
+def encrypt_decrypt(text, code, direction):
     # Takes the text to encode or decode and the encryption/decryption code as inputs
     # returns the encoded or decoded text
     encoded = ''
@@ -59,7 +59,7 @@ def encrypt_decrypt(text, code):
         bx2 = finite_multiply(code2, finite_pow(code4, 2, prime), prime)
         cx = finite_multiply(code3, code4, prime)
         cubic = finite_add(finite_add(ax3, bx2, prime), cx, prime)
-        shift = code1*cubic  # Ensures that the sign changes for encode and decode, rather than using cubic itself, does not need finite_multiply
+        shift = direction*cubic  # -ve for decode and +ve for encode
 
         # Each time a letter is parsed, code1 to code5 are incremented
         code1 = finite_add(code1, code5, prime)
@@ -109,7 +109,7 @@ while True:
     if choice == "encrypt" or choice == 'e':
         text = input("Type the message to encode, or paste text:\n")
         code = input_code("\nEnter a 6 digit code, cannot start with 0:\n", 0)
-        text = encrypt_decrypt(text, code)
+        text = encrypt_decrypt(text, code, 1)
         print(f"\nEncoded text is '{text}'")
     elif choice == "decrypt" or choice == 'd':
         # Decoding is simply running the same function with a negative code
@@ -120,7 +120,7 @@ while True:
         if new_text != '':        
             text = new_text
         code = input_code("Enter the 6 digit code or leave blank to use previous:\n", code)
-        text = encrypt_decrypt(text, -code)  
+        text = encrypt_decrypt(text, code, -1)  
         print(f"\nDecoded text is '{text}'")
     else:
         print ("\nInvalid option")
