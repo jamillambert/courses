@@ -39,7 +39,7 @@ def finite_pow(x, exponent, prime):
 
 def encrypt_decrypt(text, code, direction):
     # Takes the text to encode or decode and the encryption/decryption code as inputs
-    # returns the encoded or decoded text
+    # returns the encoded or decoded text, direction is 1 for encode and -1 for decode
     encoded = ''
     if code == 0:
         print("Invalid code entered, no encryption done")
