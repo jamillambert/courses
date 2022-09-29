@@ -8,14 +8,20 @@ text=''
 def encrypt_decrypt(text, shift):
     encoded = ""
     for letter in text:
-        new_index = alphabet.index(letter) + shift
-        while new_index  < 0:
-            # Loops back around if the shift pushes off the -ve end
-            new_index += len(alphabet)
-        while new_index > len(alphabet)-1:
-            # Loops back around if the shift pushes off the +ve end
-            new_index -= len(alphabet)
-        encoded += alphabet[new_index]
+        try:
+            new_index = alphabet.index(letter) + shift
+            while new_index  < 0:
+                # Loops back around if the shift pushes off the -ve end
+                new_index += len(alphabet)
+            while new_index > len(alphabet)-1:
+                # Loops back around if the shift pushes off the +ve end
+                new_index -= len(alphabet)
+            encoded += alphabet[new_index]
+        except:
+            # If a letter entered is not in the encode list it is added
+            # unencoded
+            encoded += letter
+        
     return encoded
 
 

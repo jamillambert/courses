@@ -2,19 +2,24 @@
 A plain text encoder/decoder that takes a single integer as the encoding key
 the shift is changed after each letter and spaces and special characters are
 used to greatly enhance the security over the simple letter substitution used
-in the original caesar cypher
+in the original caesar cypher.
+
+e.g. in this version Hello World! index 5 encodes to MoAFNab!1;$G
+in the original it encodes to mjqqt btwqi! and decodes all lower case
 
 Jamil Lamber 2022
 '''
 
 # Added a space to the original list to make breaking the code harder, i.e. word lenghts are also encrypted
-# also added some common special characters used in text
+# also added some common special characters used in text, and upper case
 
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
             'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-            'y', 'z', ' ', '_', '!', ',', '.', '?', '$', '&', '#', ';'
-            '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+',
-            '=', '@', '%', '^', '*', "'", '"', ':']
+            'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 
+            'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+            'W', 'X', 'Y', 'Z', ' ', '_', '!', ',', '.', '?', '$', '&', 
+            '#', ';', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+            '-', '+', '=', '@', '%', '^', '*', "'", '"', ':']
 
 text=''
 
@@ -24,16 +29,21 @@ def encrypt_decrypt(text, shift):
     encoded = ""
     adv_shift = shift
     for letter in text:
-        new_index = alphabet.index(letter) + adv_shift
-        while new_index  < 0:
-            # Loops back around if the shift pushes off the -ve end
-            new_index += len(alphabet)
-        while new_index > len(alphabet)-1:
-            # Loops back around if the shift pushes off the +ve end
-            new_index -= len(alphabet)
-        encoded += alphabet[new_index]
-        # For each letter the shift is incremented to stop simple breaking of the code
-        adv_shift += shift
+        try:
+            new_index = alphabet.index(letter) + adv_shift
+            while new_index  < 0:
+                # Loops back around if the shift pushes off the -ve end
+                new_index += len(alphabet)
+            while new_index > len(alphabet)-1:
+                # Loops back around if the shift pushes off the +ve end
+                new_index -= len(alphabet)
+            encoded += alphabet[new_index]
+            # For each letter the shift is incremented to stop simple breaking of the code
+            adv_shift += shift
+        except:
+            # If a letter entered is not in the encode list it is added
+            # unencoded
+            encoded += letter
     return encoded
 
 
@@ -43,7 +53,7 @@ while True:
     if direction == 'x':
         break
     if direction == "encrypt" or direction == 'e':
-        text = input("Type your message:\n").lower()
+        text = input("Type your message:\n")
         try:
             shift = int(input("Type the shift number:\n"))
         except:
