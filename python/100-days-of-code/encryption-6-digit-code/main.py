@@ -23,7 +23,6 @@ alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
 
 text=''
 
-print (alphabet)
 primes = [73, 79, 83, 89, 97, 101, 103, 107, 109, 113]  # Prime number used in encoding, the one used is determined by the last digit in the code
 
 def finite_add(x, y, prime):
