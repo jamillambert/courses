@@ -7,12 +7,11 @@ the simple letter substitution used in the original caesar cypher.
 Jamil Lamber 2022
 '''
 
+import os
+
 # Added a space to the original list to make breaking the code harder, i.e. word lengths
 # are also encrypted, also added some common special characters used in text, 
 # and upper case
-
-import os
-
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
             'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
             'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 
@@ -25,8 +24,10 @@ text=''
 
 primes = [73, 79, 83, 89, 97, 101, 103, 107, 109, 113]  # Prime number used in encoding, the one used is determined by the last digit in the code
 
+
 def finite_add(x, y, prime):
     return (x + y) % prime
+
 
 def finite_multiply(x, y, prime):
     return (x * y) % prime
