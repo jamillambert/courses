@@ -1,8 +1,8 @@
 '''
-A plain text encoder/decoder that takes a 6 digit code as the encoding key
-the character shift is changed after each letter using finite field maths.
-Spaces and special characters are used to greatly enhance the security over 
-the simple letter substitution used in the original caesar cypher.
+A plain text encoder/decoder that takes a 6 digit code as the encoding key.
+The character shift is changed after each letter using finite field maths 
+to greatly enhance the security over the simple letter substitution used 
+in the original caesar cypher.
 
 Jamil Lamber 2022
 '''

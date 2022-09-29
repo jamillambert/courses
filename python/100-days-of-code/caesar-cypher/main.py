@@ -1,3 +1,10 @@
+''' Basic letter substitution "cypher" written for the 100
+days of code course.  Extended versions with greatly enhanced
+encryption are in separate folders:
+caesar-cypher-extended
+encryption-6-digit-code
+'''
+
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
             'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 

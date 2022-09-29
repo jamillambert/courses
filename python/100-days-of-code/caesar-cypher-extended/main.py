@@ -1,7 +1,7 @@
 '''
-A plain text encoder/decoder that takes a single integer as the encoding key
-the shift is changed after each letter and spaces and special characters are
-used to greatly enhance the security over the simple letter substitution used
+A plain text encoder/decoder that takes a single integer as the encoding key.
+The shift is changed after each letter and spaces and special characters are
+used to enhance the security over the simple letter substitution used
 in the original caesar cypher.
 
 e.g. in this version Hello World! index 5 encodes to MoAFNab!1;$G
