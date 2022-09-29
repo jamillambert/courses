@@ -55,13 +55,14 @@ def encrypt_decrypt(text, code):
     for letter in text:
         # The letter shift is calculated using all 6 digits of the code
         # the maths is like a finite field
-        ax3 = finite_pow(code2, 3, prime)
-        bx2 = finite_pow(code3, 2, prime)
-        cx = finite_pow(code4, 3, prime)
+        ax3 = finite_multiply(code1, finite_pow(code4, 3, prime), prime)
+        bx2 = finite_multiply(code2, finite_pow(code4, 2, prime), prime)
+        cx = finite_multiply(code3, code4, prime)
         cubic = finite_add(finite_add(ax3, bx2, prime), cx, prime)
-        shift = code1*cubic
+        shift = code1*cubic  # Ensures that the sign changes for encode and decode, rather than using cubic itself, does not need finite_multiply
 
-        # Each time a letter is parsed, code2 to code5 are incremented
+        # Each time a letter is parsed, code1 to code5 are incremented
+        code1 = finite_add(code1, code5, prime)
         code2 = finite_add(code2, code5, prime)
         code3 = finite_add(code3, code5, prime)
         code4 = finite_add(code4, code5, prime)
