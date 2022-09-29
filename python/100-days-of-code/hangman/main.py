@@ -11,7 +11,7 @@ hangman_art.py - some ASCII art provided by 100 days of python course, the missi
 Jamil Lambert 2022
 '''
 
-import os, time
+import os
 from hangman_art import stages, logo
 from hangman_words import word_list
 import random
