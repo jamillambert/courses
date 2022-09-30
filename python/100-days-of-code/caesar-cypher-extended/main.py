@@ -10,7 +10,7 @@ in the original it encodes to mjqqt btwqi! and decodes all lower case
 Jamil Lamber 2022
 '''
 
-# Added a space to the original list to make breaking the code harder, i.e. word lenghts are also encrypted
+# Added a space to the original list to make breaking the code harder, i.e. word lengths are also encrypted
 # also added some common special characters used in text, and upper case
 
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',

@@ -46,7 +46,7 @@ def encrypt_decrypt(text, code, direction):
         print("Invalid code entered, no encryption done")
         return
     # input code is split into digits, from 1 to 10 by adding 1, so there are no 0's
-    code1 = int(code / 100000) # First digit in the code, -ve is decode, cannot be 0, enforced on input
+    code1 = int(code / 100000) # First digit in the code cannot be 0, enforced on input
     code2 = int(str(abs(code))[1]) + 1       # Second digit
     code3 = int(str(abs(code))[2]) + 1       # Third digit
     code4 = int(str(abs(code))[3]) + 1       # Fourth digit
