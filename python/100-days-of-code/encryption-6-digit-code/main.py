@@ -9,22 +9,6 @@ Jamil Lamber 2022
 
 import os
 
-# Added a space to the original list to make breaking the code harder, i.e. word lengths
-# are also encrypted, also added some common special characters used in text, 
-# and upper case
-alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-            'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-            'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 
-            'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
-            'W', 'X', 'Y', 'Z', ' ', '_', '!', ',', '.', '?', '$', '&', 
-            '#', ';', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-            '-', '+', '=', '@', '%', '^', '*', "'", '"', ':']
-
-text=''
-
-primes = [73, 79, 83, 89, 97, 101, 103, 107, 109, 113]  # Prime number used in encoding, the one used is determined by the last digit in the code
-
-
 def finite_add(x, y, prime):
     return (x + y) % prime
 
@@ -41,6 +25,21 @@ def finite_pow(x, exponent, prime):
 def encrypt_decrypt(text, code, direction):
     # Takes the text to encode or decode and the encryption/decryption code as inputs
     # returns the encoded or decoded text, direction is 1 for encode and -1 for decode
+    
+    # Added a space to the original list to make breaking the code harder, i.e. word lengths
+    # are also encrypted, also added some common special characters used in text,
+    # and upper case
+    alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+                'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+                'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+                'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+                'W', 'X', 'Y', 'Z', ' ', '_', '!', ',', '.', '?', '$', '&',
+                '#', ';', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+                '-', '+', '=', '@', '%', '^', '*', "'", '"', ':']
+
+    # Prime number used in encoding, the one used is determined by the last digit in the code
+    primes = [73, 79, 83, 89, 97, 101, 103, 107, 109, 113]
+
     encoded = ''
     if code == 0:
         print("Invalid code entered, no encryption done")
@@ -100,7 +99,7 @@ def input_code(text, previous):
         except:
             return 0
 
-
+# main()
 while True:
     # Loops until the user enters 'x'
     choice = input("\nType 'encrypt' or 'e' to encrypt, 'decrypt' or 'd' to decrypt, 'x' to exit:\n")
