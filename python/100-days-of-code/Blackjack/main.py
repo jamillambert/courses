@@ -63,7 +63,7 @@ def show_cards(cards, show_dealer):
     # as defined in the new_game function.  If show_dealer is False only the first
     # of the dealers cards is displayed, otherwise all dealt cards are shown
     os.system('cls||clear') 
-    print("Blackjack game, the cards dealt out are:")
+    print("Text based Blackjack game. The cards dealt out are:")
     if not show_dealer:
         card_string = "Dealer:      "
         card_string += card_text(cards[1][0]) + "\t"
@@ -105,7 +105,7 @@ def main():
     os.system('cls||clear')
     while True:
         try:
-            num_players = int(input("Enter the number of players for Blackjack: "))
+            num_players = int(input("Welcome to the text based Blackjack game. \nEnter the number of players: "))
             if num_players > 100 or num_players < 1:
                 input("Invalid number input")
             else:
@@ -119,6 +119,8 @@ def main():
         cards = new_game(num_players, num_decks)
         show_cards(cards, False)
         for player in range(2, num_players+2):
+            # For each player the current score is displayed and a choice is given to
+            # hit or stand
             player_score = score(cards[player])
             if player_score == 21:
                 input("\nPlayer{} BLACKJACK! press enter to continue ".format(player-1))
@@ -127,9 +129,9 @@ def main():
             else:   
                 while player_score < 21 and player_score > 0:
                     show_cards(cards, False)
-                    score_text = "({}).  Do you want another card? (y/n)".format(player_score)
+                    score_text = "({}).  Hit (h) or Stand (s)?".format(player_score)
                     choice = input("\nPlayer{} {} ".format(player-1, score_text)).lower()
-                    if choice == 'y':
+                    if choice == 'y' or choice == 'h':
                         cards[player].append(cards[0].pop())
                         player_score = score(cards[player])
                         if player_score == 21:
@@ -138,7 +140,7 @@ def main():
                             show_cards(cards, False)
                             input("\nBust! press enter to continue")
                             player_score = -1 # Even lower than the dealer busting (0)
-                    elif choice == 'n':
+                    elif choice == 'n' or choice == 's':
                         break
                     else:
                         input("Invalid input '{}'".format(choice))
@@ -150,9 +152,9 @@ def main():
             dealer_score = 22            
         else:
             while dealer_score < 17:
-                show_cards(cards, True)
                 cards[1].append(cards[0].pop())
                 dealer_score = score(cards[1])
+                show_cards(cards, True)
             if dealer_score > 21:
                 print("\nDealer Bust!")
                 dealer_score = 0  # Only thing that looses to the dealer busting is the player busting (-1)
