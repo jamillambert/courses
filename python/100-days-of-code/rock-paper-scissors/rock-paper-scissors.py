@@ -9,34 +9,10 @@ Jamil Lambert 2022
 import os
 import random
 
-# Provided text images below from 100 days of python 
-rock = '''
-    _______
----'   ____)
-      (_____)
-      (_____)
-      (____)
----.__(___)
-'''
-
-paper = '''
-    _______
----'   ____)____
-          ______)
-          _______)
-         _______)
----.__________)
-'''
-
-scissors = '''
-    _______
----'   ____)____
-          ______)
-       __________)
-      (____)
----.__(___)
-'''
-
+# Unicode rock paper and scissors
+rock = '👊'
+paper = '✋'
+scissors = '✌'
 error = "\nInput not recognised\n"
 
 # variables to store the choices and wins
@@ -51,17 +27,16 @@ os.system('cls||clear')
 
 while True:
     result = 'e' # The result of the game, 'e' is for an error in the input
-    player = input("Choose Rock 'r' Paper 'p' or Scissors 's', or 'x' to exit: ").lower()
+    player = input(f"Choose {rock} 'r' {paper} 'p' or {scissors}  's', or 'x' to exit: ").lower()
     if player == 'x':
         break
     os.system('cls||clear')
 
-    # Print out the text picture from above for the player's choice
-    print("Player:" + pictures.get(player, error))
-
     computer = choices[random.randint(0, 2)] # computer's random choice
-    # Print out the text picture from above for the computer's choice        
-    print("Computer" + pictures.get(computer, error))
+    
+    # Print out the unicode rock paper scissors for the player and computer
+    print("Player " + pictures.get(player, error) +
+          " : " + pictures.get(computer, error) + " Computer")
 
     # Check who wins, all 9 combinations written out for clarity
     if player == 'r':
