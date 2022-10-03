@@ -47,15 +47,14 @@ def card_text(code):
         text += ' King'
     else:
         text += '    ' + code[0]
-    text += ' of '
     if code[1] == 'C':
-        text += 'Clubs   '
+        text += ' \u2663'
     elif code[1] == 'D':
-        text += 'Diamonds'
+        text += ' \u2666'
     elif code[1] == 'H':
-        text += 'Hearts  '
+        text += ' \u2665'
     elif code[1] == 'S':
-        text += 'Spades  '
+        text += ' \u2660'
     return text
 
 def show_cards(cards, show_dealer):
@@ -65,9 +64,9 @@ def show_cards(cards, show_dealer):
     os.system('cls||clear') 
     print("Text based Blackjack game. The cards dealt out are:")
     if not show_dealer:
-        card_string = "Dealer:      "
+        card_string = "Dealer:       "
         card_string += card_text(cards[1][0]) + "\t"
-        card_string +=  "   #############"
+        card_string +=  "  ######"
     else:
         card_string = "Dealer ({}):  ".format(score(cards[1]))
         for card in cards[1]:
