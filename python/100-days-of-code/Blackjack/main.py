@@ -8,9 +8,11 @@ def shuffle_cards(n_decks):
     deck = []
     for suit in ('C', 'D', 'H', 'S'):
         for n in range(2, 10):
+            # cards 2 to 9
             card = str(n)+suit
             deck.append(card)
-        for picture_card in ('J', 'Q', 'K', 'A'):
+        for picture_card in ('0', 'J', 'Q', 'K', 'A'):
+            # cards 10 to Ace
             card = picture_card+suit
             deck.append(card)
     decks = []
