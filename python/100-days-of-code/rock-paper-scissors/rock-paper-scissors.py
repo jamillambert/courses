@@ -12,7 +12,7 @@ import random
 # Unicode rock paper and scissors
 rock = '👊'
 paper = '✋'
-scissors = '✌'
+scissors = '✌ '
 error = "\nInput not recognised\n"
 
 # variables to store the choices and wins
