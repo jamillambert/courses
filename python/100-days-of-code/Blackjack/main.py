@@ -33,7 +33,7 @@ def new_game(n_players, n_decks):
     return cards
 
 def card_text(code): 
-    # Returns the card in long text, e.g. 0S returns 10 of Spades
+    # Returns the card in long text, e.g. 0S returns 10 ♠
     text = ""
     if code[0] == '0':
         text += '   10'
