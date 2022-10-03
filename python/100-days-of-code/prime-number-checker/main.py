@@ -1,6 +1,6 @@
 def prime_checker(number):
-  if number > -3 and number < 3:
-    #numbers -2, -1, 0, 1, 2 are not prime
+  if number < 3:
+    #numbers 0, 1, 2 are not prime and negative numbers are by definition not prime
     print("It's not a prime number.")
     return
   for i in range(2, number-1):
