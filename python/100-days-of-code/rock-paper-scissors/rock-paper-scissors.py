@@ -16,7 +16,7 @@ scissors = '✌ '
 error = "\nInput not recognised\n"
 
 # variables to store the choices and wins
-choices = ['r', 'p', 's']
+choices = ('r', 'p', 's')
 pictures = {
     'r' : rock,
     'p' : paper,
