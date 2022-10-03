@@ -134,10 +134,10 @@ def main():
                     if choice == 'y' or choice == 'h':
                         cards[player].append(cards[0].pop())
                         player_score = score(cards[player])
+                        show_cards(cards, False)
                         if player_score == 21:
                             input("\n21! press enter to continue")
                         if player_score > 21:
-                            show_cards(cards, False)
                             input("\nBust! press enter to continue")
                             player_score = -1 # Even lower than the dealer busting (0)
                     elif choice == 'n' or choice == 's':
@@ -147,14 +147,15 @@ def main():
             scores.append(player_score)
         dealer_score = score(cards[1])        
         if dealer_score == 21:
-            score_text = "Blackjack!"
+            show_cards(cards, True)
+            print("Dealer Blackjack!")
             # Higher score than a non blackjack 21, NB. non blackjack card scores of >21 are set to 0 before comparison
             dealer_score = 22            
         else:
             while dealer_score < 17:
                 cards[1].append(cards[0].pop())
                 dealer_score = score(cards[1])
-                show_cards(cards, True)
+            show_cards(cards, True)
             if dealer_score > 21:
                 print("\nDealer Bust!")
                 dealer_score = 0  # Only thing that looses to the dealer busting is the player busting (-1)
