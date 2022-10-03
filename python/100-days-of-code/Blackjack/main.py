@@ -6,11 +6,11 @@ def shuffle_cards(n_decks):
     # cards are Strings of 0 to 9 then J Q K and A (0 represents 10), and suits
     # C, D, H, S e.g. 0D is 10 of diamonds and KS is king of spades  
     deck = []
-    for suit in ['C', 'D', 'H', 'S']:
+    for suit in ('C', 'D', 'H', 'S'):
         for n in range(2, 10):
             card = str(n)+suit
             deck.append(card)
-        for picture_card in ['J', 'Q', 'K', 'A']:
+        for picture_card in ('J', 'Q', 'K', 'A'):
             card = picture_card+suit
             deck.append(card)
     decks = []
@@ -84,7 +84,7 @@ def score(cards):
     # greater than 21 then it counts as 1.
     total = 0
     for card in cards:
-        if card[0] in ['0', 'J', 'Q', 'K']:
+        if card[0] in ('0', 'J', 'Q', 'K'):
             total += 10
         elif card[0] == 'A':
             # Initially sets all aces to 11, checked in next loop if total >21
