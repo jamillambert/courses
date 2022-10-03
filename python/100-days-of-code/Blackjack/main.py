@@ -106,15 +106,15 @@ def main():
     os.system('cls||clear')
     while True:
         try:
-            num_players = int(input("Welcome to the text based Blackjack game. \nEnter the number of players: "))
-            if num_players > 100 or num_players < 1:
+            num_players = int(input("Welcome to the text based Blackjack game. \nEnter the number of players (1-10): "))
+            if num_players > 10 or num_players < 1:
                 input("Invalid number input")
             else:
                 break
         except:
             continue
     num_decks = 6
-    
+
     while True:
         scores = []        
         cards = new_game(num_players, num_decks)
@@ -130,7 +130,7 @@ def main():
             else:   
                 while player_score < 21 and player_score > 0:
                     show_cards(cards, False)
-                    score_text = "({}).  Hit (h) or Stand (s)?".format(player_score)
+                    score_text = "({}):  Hit (h) or Stand (s)?".format(player_score)
                     choice = input("\nPlayer{} {} ".format(player-1, score_text)).lower()
                     if choice == 'y' or choice == 'h':
                         cards[player].append(cards[0].pop())
