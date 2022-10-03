@@ -29,16 +29,16 @@ def encrypt_decrypt(text, code, direction):
     # Added a space to the original list to make breaking the code harder, i.e. word lengths
     # are also encrypted, also added some common special characters used in text,
     # and upper case
-    alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+    alphabet = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
                 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
                 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
                 'W', 'X', 'Y', 'Z', ' ', '_', '!', ',', '.', '?', '$', '&',
                 '#', ';', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-                '-', '+', '=', '@', '%', '^', '*', "'", '"', ':']
+                '-', '+', '=', '@', '%', '^', '*', "'", '"', ':')
 
     # Prime number used in encoding, the one used is determined by the last digit in the code
-    primes = [73, 79, 83, 89, 97, 101, 103, 107, 109, 113]
+    primes = (73, 79, 83, 89, 97, 101, 103, 107, 109, 113)
 
     encoded = ''
     if code == 0:
