@@ -27,7 +27,7 @@ os.system('cls||clear')
 
 while True:
     result = 'e' # The result of the game, 'e' is for an error in the input
-    player = input(f"Choose {rock} 'r' {paper} 'p' or {scissors}  's', or 'x' to exit: ").lower()
+    player = input(f"Choose {rock} 'r' {paper} 'p' or {scissors} 's', or 'x' to exit: ").lower()
     if player == 'x':
         break
     os.system('cls||clear')
@@ -35,7 +35,7 @@ while True:
     computer = choices[random.randint(0, 2)] # computer's random choice
     
     # Print out the unicode rock paper scissors for the player and computer
-    print("Player " + pictures.get(player, error) +
+    print("You " + pictures.get(player, error) +
           " : " + pictures.get(computer, error) + " Computer")
 
     # Check who wins, all 9 combinations written out for clarity
