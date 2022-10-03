@@ -111,7 +111,7 @@ while True:
         text = input("Type the message to encode, or paste text:\n")
         code = input_code("\nEnter a 6 digit code, cannot start with 0:\n", 0)
         text = encrypt_decrypt(text, code, 1)
-        print(f"\nEncoded text is '{text}'")
+        print(f"\nEncoded text is:\n{text}\n")
     elif choice == "decrypt" or choice == 'd':
         # Decoding is simply running the same function with a negative code
         # an option is given to reuse the input text and code to make testing
