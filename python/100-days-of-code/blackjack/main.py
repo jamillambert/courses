@@ -38,28 +38,28 @@ def new_game(n_players, n_decks):
     return cards
 
 
-def card_text(code): 
+def card_text(card): 
     """ Returns the card in long text, e.g. 0S returns 10 ♠ """
     text = ""
-    if code[0] == '0':
+    if card[0] == '0':
         text += '   10'
-    elif code[0] == 'A':
+    elif card[0] == 'A':
         text += '  Ace'
-    elif code[0] == 'J':
+    elif card[0] == 'J':
         text += ' Jack'
-    elif code[0] == 'Q':
+    elif card[0] == 'Q':
         text += 'Queen'
-    elif code[0] == 'K':
+    elif card[0] == 'K':
         text += ' King'
     else:
-        text += '    ' + code[0]
-    if code[1] == 'C':
+        text += '    ' + card[0]
+    if card[1] == 'C':
         text += ' \u2663'
-    elif code[1] == 'D':
+    elif card[1] == 'D':
         text += ' \u2666'
-    elif code[1] == 'H':
+    elif card[1] == 'H':
         text += ' \u2665'
-    elif code[1] == 'S':
+    elif card[1] == 'S':
         text += ' \u2660'
     return text
 
