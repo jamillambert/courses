@@ -1,10 +1,12 @@
 import random
 import os
 
+
 def shuffle_cards(n_decks):
-    # Returns a shuffled list of {n_decks} decks of cards 
-    # cards are Strings of 0 to 9 then J Q K and A (0 represents 10), and suits
-    # C, D, H, S e.g. 0D is 10 of diamonds and KS is king of spades  
+    """ Returns a shuffled list of {n_decks} decks of cards
+    
+    cards are Strings of 0 to 9 then J Q K and A (0 represents 10), and suits
+    C, D, H, S e.g. 0D is 10 of diamonds and KS is king of spades """
     deck = []
     for suit in ('C', 'D', 'H', 'S'):
         for n in range(2, 10):
@@ -23,9 +25,10 @@ def shuffle_cards(n_decks):
 
 
 def new_game(n_players, n_decks):
-    # Starts a new game, returns cards[] which is an array of all the cards
-    # cards[0] is the undealt deck, cards[1] is the dealers dealt cards
-    # and cards[x] where x > 1 are the players dealt cards
+    """ Starts a new game, returns cards[] which is an array of all the cards
+    
+    cards[0] is the undealt deck, cards[1] is the dealers dealt cards
+    and cards[x] where x > 1 are the players dealt cards """
     cards = [shuffle_cards(n_decks)]
     dealer_cards = [cards[0].pop(0), cards[0].pop(0)]
     cards.append(dealer_cards)
@@ -34,8 +37,9 @@ def new_game(n_players, n_decks):
         cards.append(player_cards)
     return cards
 
+
 def card_text(code): 
-    # Returns the card in long text, e.g. 0S returns 10 ♠
+    """ Returns the card in long text, e.g. 0S returns 10 ♠ """
     text = ""
     if code[0] == '0':
         text += '   10'
@@ -59,10 +63,12 @@ def card_text(code):
         text += ' \u2660'
     return text
 
+
 def show_cards(cards, show_dealer):
-    # Displays the currently dealt cards, input is a list of each set of cards
-    # as defined in the new_game function.  If show_dealer is False only the first
-    # of the dealers cards is displayed, otherwise all dealt cards are shown
+    """ Displays the currently dealt cards, input is a list of each set of cards
+    
+    Card list is defined in the new_game function.  If show_dealer is False only the first
+    of the dealers cards is displayed, otherwise all dealt cards are shown """
     os.system('cls||clear') 
     print("Text based Blackjack game. The cards dealt out are:")
     if not show_dealer:
@@ -100,6 +106,7 @@ def score(cards):
             # e.g. cards (2, A, A, A) would score (2 + 1 + 1 + 11 = 15)
             total -= 10
     return total
+
 
 def main():
     # Runs the game and calculates the result 
@@ -173,5 +180,6 @@ def main():
         choice = input("\nDo you want to play again? (y/n) ")
         if choice != 'y':
             break
+
 
 main()
