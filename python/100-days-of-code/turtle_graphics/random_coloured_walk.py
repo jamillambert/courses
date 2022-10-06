@@ -18,7 +18,7 @@ def random_walk(distance):
             turtle.goto(0, 0)
 
 
-distance = 1000
+dist= 1000
 turtle = Turtle()
 turtle.speed(10)
 screen1 = Screen()
