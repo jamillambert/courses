@@ -12,7 +12,7 @@ def input_number(text, min_number, max_number, default):
     try:
         number = int(input(text))
     except ValueError:
-        number = min_number - 1  # forces if statement below to be true
+        number = min_number - 1  # Invalid int entered so this forces if statement below to be true
     if number < min_number or number > max_number:
         input(f"invalid input, set to default {default}, press enter to continue")
         number = default
