@@ -113,7 +113,7 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     if let Some(labels) = in_collision(engine) {
         // Handles collisions of the player car
         if labels[0] == "player" {
-            player_collision(&labels, engine, game_state);
+            player_collision(&labels[1], engine, game_state);
         } else if labels[0].contains("b") {
             // if a barrel or bomb was spawned in collision with an NPC it is moved
             barrel_collision(engine, &labels[0], game_state);
@@ -163,11 +163,11 @@ fn barrel_collision(engine: &mut Engine, label: &String, game_state: &mut GameSt
     (sprite.translation.x, sprite.translation.y) = randomise_location(game_state);
 }
 
-fn player_collision(labels: &Vec<String>, engine: &mut Engine, game_state: &mut GameState) {
-    if labels[1].contains("barrel") {
+fn player_collision(label: &String, engine: &mut Engine, game_state: &mut GameState) {
+    if label.contains("barrel") {
         // When the player hits a barrel they score 1 point and the barrel disappears
         info!("Player hit a barrel");
-        engine.sprites.remove(&*labels[1]);
+        engine.sprites.remove(label);
         game_state.current_score += 1;
         let score = engine.texts.get_mut("score").unwrap();
         score.value = format!("Score: {}", game_state.current_score);
@@ -181,7 +181,7 @@ fn player_collision(labels: &Vec<String>, engine: &mut Engine, game_state: &mut 
         } else {
             engine.audio_manager.play_sfx(SfxPreset::Minimize1, 0.5);
         }
-    } else if labels[1].contains("car") {
+    } else if label.contains("car") {
         // When the player hits another car or a bomb the game is over,
         // resetting the score and position
         engine.audio_manager.play_sfx(SfxPreset::Jingle3, 0.5);
