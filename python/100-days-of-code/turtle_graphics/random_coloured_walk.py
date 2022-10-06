@@ -49,8 +49,8 @@ def random_colour(colour, colour_sign, step):
 def multiple_turtle_walk():
     """Creates a list of turtles and then runs the random_walk on it"""
     number_turtles = 100
+    max_step_length = 50
     steps = 2000
-    max_step_length = 20
     turtle_list = []
     for _ in range(number_turtles):
         turtle = Turtle()
