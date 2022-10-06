@@ -3,41 +3,39 @@ from quiz import Quiz
 from os import system
 
 
-def input_number(text, min, max, default):
+def input_number(text, min_number, max_number, default):
     """Returns a number input from the terminal or default if it fails
-
+    
     The input text is displayed to the terminal as a prompt for the user to input
     a number.  If a number is not entered within the input min and max values the
     default value is returned"""
     try:
         number = int(input(text))
-    except:
-        number = min - 1  # forces if statement below to be true
-    if number < min or number > max:
-        input(
-            f"invalid input, set to default {default}, press enter to continue")
+    except ValueError:
+        number = min_number - 1  # forces if statement below to be true
+    if number < min_number or number > max_number:
+        input(f"invalid input, set to default {default}, press enter to continue")
         number = default
     return number
 
 
 def input_text(text, default):
     """Returns either the text in the default array if it is entered or it's index, otherwise the text at index 0 is returned
-
+    
     The input text is displayed to the terminal as a prompt for the user to input
     the index or text of the array."""
     return_text = 'invalid'
     choice = input(text)
     try:
-        number = int(choice)-1
+        number = int(choice) - 1
         return_text = default[number]
-    except:
+    except ValueError:
         for d in default:
             if choice == d:
                 return_text = d
     if return_text == 'invalid':
         return_text = default[0]
-        input(
-            f"invalid input, set to default {return_text}, press enter to continue")
+        input(f"invalid input, set to default {return_text}, press enter to continue")
     return return_text
 
 
@@ -70,7 +68,8 @@ def main_menu(quiz):
                 'easy', 'medium', 'hard'])
         elif choice == 't':
             quiz.question_type = input_text(
-                '\nEnter the question type, 1: True/False, 2: Multiple Choice, 3: All Questions : ', ['boolean', 'multiple', ''])
+                '\nEnter the question type, 1: True/False, 2: Multiple Choice, 3: All Questions : ',
+                ['boolean', 'multiple', ''])
         elif choice == 's':
             print("\nChoose a subject number from the below list:")
             code_list = []
@@ -102,8 +101,7 @@ def new_game():
     print(("\n\n\033[1;36mWelcome to the Trivia Quiz\033[0m\n\n"))
     print("Questions are sourced from Open Trivia Database https://opentdb.com/")
     print_options(quiz)
-    choice = input(
-        "\nPress Enter to continue, or type 's' to change settings: ")
+    choice = input("\nPress Enter to continue, or type 's' to change settings: ")
     if choice == 's':
         main_menu(quiz)
     print("Sourcing questions from https://opentdb.com/")
