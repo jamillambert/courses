@@ -33,39 +33,6 @@ impl Default for GameState {
     }
 }
 
-fn randomise_location(game_state: &mut GameState) -> (f32, f32) {
-    // Returns a random location within the game screen, away 50 from the edges
-    let max_x = game_state.window_x / 2.0 - 50.0;
-    let max_y = game_state.window_y / 2.0 - 50.0;
-    (
-        thread_rng().gen_range(-max_x..max_x),
-        thread_rng().gen_range(-max_y..max_y),
-    )
-}
-
-fn in_collision(engine: &mut Engine) -> Option<Vec<String>> {
-    // If there is a collision the two sprite labels are returned, player is always
-    // at location 0 if involved
-    let mut labels = Vec::new();
-    for event in engine.collision_events.drain(..) {
-        debug!("{} is in collision with {}", event.pair.0, event.pair.1);
-        if event.state == CollisionState::Begin {
-            if event.pair.0 == "player" {
-                labels.push(String::from("player"));
-                labels.push(event.pair.1);
-            } else if event.pair.1 == "player" {
-                labels.push(String::from("player"));
-                labels.push(event.pair.0);
-            } else {
-                labels.push(event.pair.0);
-                labels.push(event.pair.1);
-            }
-            return Some(labels);
-        }
-    }
-    return None;
-}
-
 fn reset_game(engine: &mut Engine, game_state: &mut GameState) {
     // When the game first starts or is over the score is reset to 0
     // and the player is moved back to the centre of the screen and
@@ -158,6 +125,29 @@ fn resize_scoreboard(game_state: &mut GameState, engine: &mut Engine) {
     high_score.translation.y = engine.window_dimensions.y / 2.0 - 30.0;
 }
 
+fn in_collision(engine: &mut Engine) -> Option<Vec<String>> {
+    // If there is a collision the two sprite labels are returned, player is always
+    // at location 0 if involved
+    let mut labels = Vec::new();
+    for event in engine.collision_events.drain(..) {
+        debug!("{} is in collision with {}", event.pair.0, event.pair.1);
+        if event.state == CollisionState::Begin {
+            if event.pair.0 == "player" {
+                labels.push(String::from("player"));
+                labels.push(event.pair.1);
+            } else if event.pair.1 == "player" {
+                labels.push(String::from("player"));
+                labels.push(event.pair.0);
+            } else {
+                labels.push(event.pair.0);
+                labels.push(event.pair.1);
+            }
+            return Some(labels);
+        }
+    }
+    return None;
+}
+
 fn barrel_collision(engine: &mut Engine, label: &String, game_state: &mut GameState) {
     let sprite = engine.sprites.get_mut(label).unwrap();
     (sprite.translation.x, sprite.translation.y) = randomise_location(game_state);
@@ -210,10 +200,23 @@ fn spawn_barrel(engine: &mut Engine, game_state: &mut GameState) {
     (sprite.translation.x, sprite.translation.y) = randomise_location(game_state);
 }
 
+fn randomise_location(game_state: &mut GameState) -> (f32, f32) {
+    // Returns a random location within the game screen, away 50 from the edges
+    let max_x = game_state.window_x / 2.0 - 50.0;
+    let max_y = game_state.window_y / 2.0 - 50.0;
+    (
+        thread_rng().gen_range(-max_x..max_x),
+        thread_rng().gen_range(-max_y..max_y),
+    )
+}
+
 fn move_player(engine: &mut Engine, game_state: &mut GameState) {
     let player = engine.sprites.get_mut("player").unwrap();
 
     // first four cases are diagonal movement
+    let diagonal_distance = game_state.movement_speed * engine.delta_f32 / 1.4142;
+    // last four cases are orthogonal movement
+    let distance = game_state.movement_speed * engine.delta_f32;
     if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Up, KeyCode::W])
@@ -222,8 +225,8 @@ fn move_player(engine: &mut Engine, game_state: &mut GameState) {
             .pressed_any(&[KeyCode::Right, KeyCode::D])
     {
         player.rotation = PI / 4.0;
-        player.translation.x += game_state.movement_speed * engine.delta_f32 / 1.4142;
-        player.translation.y += game_state.movement_speed * engine.delta_f32 / 1.4142;
+        player.translation.x += diagonal_distance;
+        player.translation.y += diagonal_distance;
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Up, KeyCode::W])
@@ -232,8 +235,8 @@ fn move_player(engine: &mut Engine, game_state: &mut GameState) {
             .pressed_any(&[KeyCode::Left, KeyCode::A])
     {
         player.rotation = PI * 3.0 / 4.0;
-        player.translation.x -= game_state.movement_speed * engine.delta_f32 / 1.4142;
-        player.translation.y += game_state.movement_speed * engine.delta_f32 / 1.4142;
+        player.translation.x -= diagonal_distance;
+        player.translation.y += diagonal_distance;
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Down, KeyCode::S])
@@ -242,8 +245,8 @@ fn move_player(engine: &mut Engine, game_state: &mut GameState) {
             .pressed_any(&[KeyCode::Left, KeyCode::A])
     {
         player.rotation = PI * 5.0 / 4.0;
-        player.translation.x -= game_state.movement_speed * engine.delta_f32 / 1.4142;
-        player.translation.y -= game_state.movement_speed * engine.delta_f32 / 1.4142;
+        player.translation.x -= diagonal_distance;
+        player.translation.y -= diagonal_distance;
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Down, KeyCode::S])
@@ -252,33 +255,32 @@ fn move_player(engine: &mut Engine, game_state: &mut GameState) {
             .pressed_any(&[KeyCode::Right, KeyCode::D])
     {
         player.rotation = PI * 7.0 / 4.0;
-        player.translation.x += game_state.movement_speed * engine.delta_f32 / 1.4142;
-        player.translation.y -= game_state.movement_speed * engine.delta_f32 / 1.4142;
+        player.translation.x += diagonal_distance;
+        player.translation.y -= diagonal_distance;
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Up, KeyCode::W])
     {
-        // last four cases are orthogonal movement
         player.rotation = UP;
-        player.translation.y += game_state.movement_speed * engine.delta_f32;
+        player.translation.y += distance;
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Down, KeyCode::S])
     {
         player.rotation = DOWN;
-        player.translation.y -= game_state.movement_speed * engine.delta_f32;
+        player.translation.y -= distance;
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Left, KeyCode::A])
     {
         player.rotation = LEFT;
-        player.translation.x -= game_state.movement_speed * engine.delta_f32;
+        player.translation.x -= distance;
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Right, KeyCode::D])
     {
         player.rotation = RIGHT;
-        player.translation.x += game_state.movement_speed * engine.delta_f32;
+        player.translation.x += distance;
     }
 }
 
