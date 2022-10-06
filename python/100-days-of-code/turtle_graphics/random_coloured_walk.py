@@ -12,8 +12,8 @@ def random_walk(distance, turtles):
     b_sign = 1
     for _ in range(distance):
         for turtle in turtles:
-            turtle.forward(random.randint(0, 100))
             turtle.right(random.randint(0, 359))
+            turtle.forward(random.randint(0, 100))
             r += random.randint(0, 20)*r_sign
             g += random.randint(0, 20)*g_sign
             b += random.randint(0, 20)*b_sign
