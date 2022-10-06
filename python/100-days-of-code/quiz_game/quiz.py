@@ -96,9 +96,9 @@ class Quiz:
             answer = parsed_question[9]
             question = Question(subject, answer_type, difficulty, text, answer)
             if answer_type != 'boolean':
-                incorrect_answers = []
+                multiple_choices = []
                 for i in range(11, len(parsed_question)-1):
-                    incorrect_answers.append(parsed_question[i])
-                question.set_multiple_choice(incorrect_answers)
+                    multiple_choices.append(parsed_question[i])
+                question.set_multiple_choice(multiple_choices)
             questions.append(question)
         return questions
