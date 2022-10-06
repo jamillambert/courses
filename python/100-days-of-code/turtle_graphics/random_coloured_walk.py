@@ -23,6 +23,6 @@ turtle = Turtle()
 turtle.speed(10)
 screen1 = Screen()
 screen1.colormode(255)
-random_walk(distance)
+random_walk(dist)
 screen1.exitonclick()
 
