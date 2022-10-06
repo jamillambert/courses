@@ -1,6 +1,8 @@
 from math import sqrt
 import random
-from turtle import Turtle, Screen
+import turtle
+
+import _tkinter
 
 
 def random_walk(num_steps, step_length, turtles):
@@ -10,22 +12,22 @@ def random_walk(num_steps, step_length, turtles):
     colour_step = 20
     for _ in range(num_steps):
         (colour, colour_sign) = random_colour(colour, colour_sign, colour_step)
-        for turtle in turtles:
-            turtle.color(colour)
-            turtle.pencolor(colour)
-            turtle.right(random.randint(0, 359))
-            turtle.forward(random.randint(0, step_length))
-            if abs(turtle.xcor()) > screen1.window_width()/2 or abs(turtle.ycor()) > screen1.window_height()/2:
-                random_position(turtle)
+        for t in turtles:
+            t.color(colour)
+            t.pencolor(colour)
+            t.right(random.randint(0, 359))
+            t.forward(random.randint(0, step_length))
+            if abs(t.xcor()) > screen1.window_width()/2 or abs(t.ycor()) > screen1.window_height()/2:
+                random_position(t)
 
 
-def random_position(turtle):
-    """Sets the turtle to a random position on the screen"""
-    turtle.up()
+def random_position(t):
+    """Sets the turtle {t} to a random position on the screen"""
+    t.up()
     x = int(random.randint(-screen1.window_width() / 2, screen1.window_width() / 2))
     y = int(random.randint(-screen1.window_height() / 2, screen1.window_height() / 2))
-    turtle.goto(x, y)
-    turtle.down()
+    t.goto(x, y)
+    t.down()
 
 
 def random_colour(colour, colour_sign, step):
@@ -53,21 +55,26 @@ def multiple_turtle_walk():
     steps = 2000
     turtle_list = []
     for _ in range(number_turtles):
-        turtle = Turtle()
-        turtle.color("white")
-        turtle.shape("circle")
-        turtle.speed(0)
-        turtle.down()
-        turtle.shapesize(0.5,0.5,1)
-        turtle.width(10)
-        random_position(turtle)
-        turtle_list.append(turtle)
-    random_walk(steps, max_step_length, turtle_list)
+        t = turtle.Turtle()
+        t.color("white")
+        t.shape("circle")
+        t.speed(0)
+        t.down()
+        t.shapesize(0.5,0.5,1)
+        t.width(10)
+        random_position(t)
+        turtle_list.append(t)
+    try:
+        random_walk(steps, max_step_length, turtle_list)
+        return True
+    except (turtle.Terminator, _tkinter.TclError):
+        print("Window was closed before the animation finished")
+        return False
 
 
 # Creates a screen and then runs the animation
-screen1 = Screen()
+screen1 = turtle.Screen()
 screen1.colormode(255)
 screen1.delay(0)
-multiple_turtle_walk()
-screen1.exitonclick()
+if multiple_turtle_walk():
+    screen1.exitonclick()
