@@ -1,4 +1,6 @@
 # File for testing small sections of code that are not required as part of a project
+import math
+
 
 def sqrt(n, precision):
     ans = n
@@ -17,7 +19,10 @@ def sqrt(n, precision):
             error = -error/2
         ans = ans - error
     return ans
-n = 100
+n = 17
 precision = 10
 ans = sqrt(n, 10)
-print("Square root of {} is {:14f} with a calculatuion precision of {}".format(n, ans, precision))
+print("Square root of {} is {:0.9f} with a calculation precision of {}".format(n, ans, precision))
+
+
+print("Using the math crate the square root of {} is {}".format(n, math.sqrt(n)))
