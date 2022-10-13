@@ -19,10 +19,10 @@ def sqrt(n, precision):
             error = -error/2
         ans = ans - error
     return ans
-n = 17
+n = 2
 precision = 10
 ans = sqrt(n, 10)
+math_ans = math.sqrt(n)
 print("Square root of {} is {:0.9f} with a calculation precision of {}".format(n, ans, precision))
-
-
-print("Using the math crate the square root of {} is {}".format(n, math.sqrt(n)))
+print("Using the math crate the square root of {} is {}".format(n, math_ans))
+print("Difference between the two is {:0.2e}".format(ans-math_ans))
