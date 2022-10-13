@@ -135,29 +135,29 @@ def main():
     screen.tracer(number_turtles, 0)
     turtle_list = multiple_turtles(random_start, number_turtles, width, height)
 
-    # """Spirograph"""
-    # try:
-    #     spirograph(separation, size, turtle_list)
-    #     print("Animation finished")
-    #     screen.exitonclick()
-    # except (turtle.Terminator, _tkinter.TclError):
-    #     print("Window was closed before the animation finished")
-
-    """Random walk"""
+    """Spirograph"""
     try:
-        random_walk(number_steps, max_step_length, turtle_list, width, height)
+        spirograph(separation, size, turtle_list)
         print("Animation finished")
         screen.exitonclick()
     except (turtle.Terminator, _tkinter.TclError):
         print("Window was closed before the animation finished")
 
-    # """Dot pattern"""
+    # """Random walk"""
     # try:
-    #     dot_grid(11, 11, 100, 50, color_list, turtle.Turtle())
+    #     random_walk(number_steps, max_step_length, turtle_list, width, height)
     #     print("Animation finished")
     #     screen.exitonclick()
     # except (turtle.Terminator, _tkinter.TclError):
     #     print("Window was closed before the animation finished")
+
+    """Dot pattern"""
+    try:
+        dot_grid(11, 11, 100, 50, color_list, turtle.Turtle())
+        print("Animation finished")
+        screen.exitonclick()
+    except (turtle.Terminator, _tkinter.TclError):
+        print("Window was closed before the animation finished")
 
 
 main()
