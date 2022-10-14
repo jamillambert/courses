@@ -211,6 +211,7 @@ fn randomise_location(game_state: &mut GameState) -> (f32, f32) {
 }
 
 fn move_player(engine: &mut Engine, game_state: &mut GameState) {
+    // Handles the keyboard inputs to move the player sprite
     let player = engine.sprites.get_mut("player").unwrap();
 
     // first four cases are diagonal movement
@@ -320,6 +321,7 @@ fn loop_motion(engine: &mut Engine) {
 }
 
 fn main() {
+    // Starts a new game adds the game logic and runs the game state
     let mut game = Game::new();
     let game_state = GameState::default();
 
