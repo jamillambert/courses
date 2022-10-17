@@ -1,5 +1,6 @@
 import random
 
+
 class Question:
     def __init__(self, subject, answer_type, difficulty, text, answer):
         self.subject = subject
@@ -37,6 +38,8 @@ class Question:
         
         For true of false questions, any of t, f, true or false are accepted, non case sensitive
         for multiple choice questions the answer must be an integer between 1 and (number of options) inclusive"""
+        if user_answer == 'x':
+            return True
         if self.answer_type == 'boolean':
             if user_answer.lower() in ['t', 'f', 'false', 'true']:
                 return True

@@ -10,6 +10,9 @@ def input_number(text, min_number, max_number, default):
     The input text is displayed to the terminal as a prompt for the user to input
     a number.  If a number is not entered within the input min and max values the
     default value is returned"""
+    if text == 'x':
+        # If x is entered at any time as an answer the quiz is stopped early
+        return -1
     try:
         number = int(input(text))
     except ValueError:
@@ -105,6 +108,8 @@ def new_game():
     choice = input("\nPress Enter to continue, or type 's' to change settings: ")
     if choice == 's':
         main_menu(quiz)
+    elif choice == 'x':
+        return quiz
     print("Sourcing questions from https://opentdb.com/")
     quiz.create_question_list()
     return quiz
@@ -117,7 +122,9 @@ def main():
 
         system('cls||clear')
         for i in range(quiz.num_questions):
-            quiz.ask_question(i)
+            if quiz.ask_question(i) == False:
+                i -= 1
+                break
 
         print(
             f"\n\033[1mYour final score was {quiz.score}/{quiz.question_number}\033[0m\n\n")

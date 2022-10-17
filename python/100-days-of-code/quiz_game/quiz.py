@@ -23,18 +23,26 @@ class Quiz:
 
     def ask_question(self, index):
         """Prints out the next question and checks if the answer is correct"""
-        self.question_number += 1
-        current_question = self.question_list[index]
-        while True:
-            print("\n")
-            current_question.print_question()
-            user_answer = input(f"\nQ.{index+1}: Answer? ").lower()
-            if current_question.valid_answer(user_answer):
-                break
+        if index < len(self.question_list):
+            current_question = self.question_list[index]
+            while True:
+                print("\n")
+                current_question.print_question()
+                user_answer = input(f"\nQ.{index+1}: Answer? ").lower()
+                if current_question.valid_answer(user_answer):
+                    break
+                else:
+                    print(
+                        "Invalid answer, type t for true, f for false or the number option for multiple choice")
+                    print("Or type x to stop the quiz early")
+            if user_answer == 'x':
+                return False
             else:
-                print(
-                    "Invalid answer, type t for true, f for false or the number option for multiple choice")
-        self.print_result(user_answer, current_question)
+                self.question_number += 1
+                self.print_result(user_answer, current_question)
+                return True
+        else:
+            return False
         
 
     def create_question_list(self):
