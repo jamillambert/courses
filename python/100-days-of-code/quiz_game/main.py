@@ -1,6 +1,7 @@
+from os import system
+
 from html_parser import parse_site
 from quiz import Quiz
-from os import system
 
 
 def input_number(text, min_number, max_number, default):

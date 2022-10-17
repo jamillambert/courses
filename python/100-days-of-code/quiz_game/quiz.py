@@ -1,6 +1,9 @@
-import random, re
-from question_model import Question
+import random
+import re
+
 from html_parser import parse_site
+from question_model import Question
+
 
 class Quiz:
 
