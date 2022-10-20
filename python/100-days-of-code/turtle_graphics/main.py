@@ -3,7 +3,7 @@ import random
 import turtle
 import _tkinter
 
-COLOR_STEP = 10
+COLOR_STEP = 5
 PEN_WIDTH = 1
 
 
@@ -117,10 +117,10 @@ def multiple_turtles(random_start, num_turtles, width, height):
 def main():
     """Creates a screen and then runs the animation, different animations are commented out at the bottom"""
 
-    number_turtles = 1  # Number of turtles for all functions
-    number_steps = 10000  # Number of steps in random walk
-    max_step_length = 10  # Maximum step length in random walk
-    random_start = False  # If the initial positions are random or at the centre
+    number_turtles = 100 # Number of turtles for all functions
+    number_steps = 1000  # Number of steps in random walk
+    max_step_length = 1000  # Maximum step length in random walk
+    random_start = True  # If the initial positions are random or at the centre
     separation = 5  # separation of circles in spirograph
     size = 200  # size of circles in spirograph
     min_rgb = (0, 0, 50)  # must be 3 integers between 0 and 255 inclusive
@@ -128,36 +128,36 @@ def main():
     color_list = random_colour_list(100, min_rgb, max_rgb)
 
     screen = turtle.Screen()
-    width = screen.window_width() - 500
-    height = screen.window_height() - 500
+    width = screen.window_width()
+    height = screen.window_height()
     screen.colormode(255)
     screen.delay(0)
     screen.tracer(number_turtles, 0)
     turtle_list = multiple_turtles(random_start, number_turtles, width, height)
 
-    """Spirograph"""
-    try:
-        spirograph(separation, size, turtle_list)
-        print("Animation finished")
-        screen.exitonclick()
-    except (turtle.Terminator, _tkinter.TclError):
-        print("Window was closed before the animation finished")
-
-    # """Random walk"""
+    # """Spirograph"""
     # try:
-    #     random_walk(number_steps, max_step_length, turtle_list, width, height)
+    #     spirograph(separation, size, turtle_list)
     #     print("Animation finished")
     #     screen.exitonclick()
     # except (turtle.Terminator, _tkinter.TclError):
     #     print("Window was closed before the animation finished")
 
-    """Dot pattern"""
+    """Random walk"""
     try:
-        dot_grid(11, 11, 100, 50, color_list, turtle.Turtle())
+        random_walk(number_steps, max_step_length, turtle_list, width, height)
         print("Animation finished")
         screen.exitonclick()
     except (turtle.Terminator, _tkinter.TclError):
         print("Window was closed before the animation finished")
+
+    # """Dot pattern"""
+    # try:
+    #     dot_grid(11, 11, 100, 50, color_list, turtle.Turtle())
+    #     print("Animation finished")
+    #     screen.exitonclick()
+    # except (turtle.Terminator, _tkinter.TclError):
+    #     print("Window was closed before the animation finished")
 
 
 main()
