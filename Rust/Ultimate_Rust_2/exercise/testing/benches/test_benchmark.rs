@@ -1,5 +1,5 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use testing::{sploosh, fizz_buzz};
+use testing::{fizz_buzz};
 
 pub fn test_benchmark(c: &mut Criterion) {
     // c.bench_function("sploosh", |b| {
