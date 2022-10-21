@@ -3,16 +3,13 @@ import random
 import turtle
 import _tkinter
 
-COLOR_STEP = 5
-PEN_WIDTH = 1
 
-
-def random_walk(num_steps, step_length, turtles, width, height):
+def random_walk(num_steps, step_length, turtles, width, height, colour_step):
     """Moves each turtle in the input list {turtles} {num_steps} random steps of up to {step_length} max length"""
     colour = [255, 255, 255]
     colour_sign = [1, 1, 1]
     for _ in range(num_steps):
-        (colour, colour_sign) = random_colour_increment(colour, colour_sign)
+        (colour, colour_sign) = random_colour_increment(colour, colour_sign, colour_step)
         for t in turtles:
             t.color(colour)
             t.pencolor(colour)
@@ -22,12 +19,12 @@ def random_walk(num_steps, step_length, turtles, width, height):
                 random_position(t, width, height)
 
 
-def spirograph(separation, size, turtles):
+def spirograph(separation, size, turtles, colour_step):
     colour = [255, 255, 255]
     colour_sign = [1, 1, 1]
-    (colour, colour_sign) = random_colour_increment(colour, colour_sign)
+    (colour, colour_sign) = random_colour_increment(colour, colour_sign, colour_step)
     for _ in range(int(360 / separation)):
-        (colour, colour_sign) = random_colour_increment(colour, colour_sign)
+        (colour, colour_sign) = random_colour_increment(colour, colour_sign, colour_step)
         for t in turtles:
             t.color(colour)
             t.pencolor(colour)
@@ -63,7 +60,7 @@ def random_position(t, width, height):
     t.down()
 
 
-def random_colour_increment(colour, colour_sign):
+def random_colour_increment(colour, colour_sign, colour_step):
     """Returns two lists, a list with the colour [r, g, b] and which direction each are moving +/- [1, 1, 1]
 
     The red green and blue values of the colour are incremented randomly up to the
@@ -71,7 +68,7 @@ def random_colour_increment(colour, colour_sign):
     and the direction in colour_sign is changed so it moves in the opposite direction
     next time"""
     for i in range(3):
-        colour[i] += random.randint(0, COLOR_STEP) * colour_sign[i]
+        colour[i] += random.randint(0, colour_step) * colour_sign[i]
         if colour[i] > 255:
             colour_sign[i] = -1
             colour[i] = 255
@@ -96,7 +93,7 @@ def random_colour_list(size, min_rgb, max_rgb):
     return colour_list
 
 
-def multiple_turtles(random_start, num_turtles, width, height):
+def multiple_turtles(random_start, num_turtles, width, height, pen_width):
     """Creates a list of turtles and then runs the random_walk on it
 
     if random_start is true the initial positions are random, if false they all start at (0 ,0)
@@ -107,7 +104,7 @@ def multiple_turtles(random_start, num_turtles, width, height):
         t.speed(0)
         t.down()
         t.hideturtle()
-        t.width(PEN_WIDTH)
+        t.width(pen_width)
         if random_start:
             random_position(t, width, height)
         turtle_list.append(t)
@@ -117,43 +114,36 @@ def multiple_turtles(random_start, num_turtles, width, height):
 def main():
     """Creates a screen and then runs the animation, different animations are commented out at the bottom"""
 
-    number_turtles = 100 # Number of turtles for all functions
+    pen_width = 1
+    colour_step = 5
+    number_turtles = 100  # Number of turtles for all functions
+    random_start = True  # If the initial positions are random or at the centre, in random walk and spirograph
+
     number_steps = 1000  # Number of steps in random walk
     max_step_length = 1000  # Maximum step length in random walk
-    random_start = True  # If the initial positions are random or at the centre
+
     separation = 5  # separation of circles in spirograph
     size = 200  # size of circles in spirograph
-    min_rgb = (0, 0, 50)  # must be 3 integers between 0 and 255 inclusive
-    max_rgb = (200, 200, 200)  # must be 3 integers between 0 and 255 inclusive
-    color_list = random_colour_list(100, min_rgb, max_rgb)
+
+    min_rgb = (0, 0, 50)  # must be 3 integers between 0 and 255 inclusive for dot pattern
+    max_rgb = (200, 200, 200)  # must be 3 integers between 0 and 255 inclusive for dot pattern
+    color_list = random_colour_list(100, min_rgb, max_rgb)  # colours to use for dot pattern
 
     screen = turtle.Screen()
-    width = screen.window_width()
-    height = screen.window_height()
+    width = screen.window_width()   # reduce by e.g. -500 to bring in the patterns from the edges of the screen
+    height = screen.window_height()   # reduce by e.g. -500 to bring in the patterns from the edges of the screen
     screen.colormode(255)
     screen.delay(0)
     screen.tracer(number_turtles, 0)
-    turtle_list = multiple_turtles(random_start, number_turtles, width, height)
+    turtle_list = multiple_turtles(random_start, number_turtles, width, height, pen_width)
 
-    # """Spirograph"""
-    # try:
-    #     spirograph(separation, size, turtle_list)
-    #     print("Animation finished")
-    #     screen.exitonclick()
-    # except (turtle.Terminator, _tkinter.TclError):
-    #     print("Window was closed before the animation finished")
-
-    # """Random walk"""
-    # try:
-    #     random_walk(number_steps, max_step_length, turtle_list, width, height)
-    #     print("Animation finished")
-    #     screen.exitonclick()
-    # except (turtle.Terminator, _tkinter.TclError):
-    #     print("Window was closed before the animation finished")
-
-    """Dot pattern"""
     try:
-        dot_grid(11, 11, 100, 60, color_list, turtle.Turtle())
+        # spirograph(separation, size, turtle_list, colour_step) # Spirograph
+
+        random_walk(number_steps, max_step_length, turtle_list, width, height, colour_step)  # Random walk
+
+        # dot_grid(11, 11, 100, 60, color_list, turtle.Turtle(), colour_step)  # Dot pattern
+
         print("Animation finished")
         screen.exitonclick()
     except (turtle.Terminator, _tkinter.TclError):
