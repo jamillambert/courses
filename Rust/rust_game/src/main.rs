@@ -26,7 +26,7 @@ impl Default for GameState {
             movement_speed: 100.0,
             barrel_index: 0,
             spawn_timer: Timer::from_seconds(1.0, true),
-            max_barrels: 4,
+            max_barrels: 6,
             window_x: 0.0,
             window_y: 0.0,
         }
