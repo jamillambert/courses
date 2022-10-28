@@ -9,5 +9,5 @@ Exercises and other work done for training courses
     - Exercises from the Udemy python course "100 days of code" by Dr. Angela Yu
 3. Rust/Ultimate-Rust-Crash-courses
     - Exercises from the Udemy Rust course "Ultimate Rust Crash Course" by Nathan Stocks, [GitHub Page: ultimate_rust_crash_course](https://github.com/CleanCut/ultimate_rust_crash_course)
-4. Rust/Ultimate-Rust-Crash-courses
+4. Rust/Ultimate_Rust_2
     - Exercises from the Udemy Rust course "Ultimate Rust 2: Intermediate Concepts" by Nathan Stocks [GitHub Page: ultimate_rust2](https://github.com/CleanCut/ultimate_rust2)
