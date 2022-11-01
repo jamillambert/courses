@@ -1,19 +1,19 @@
-'''Practice test for the Thompson GIA Test 3: Number speed & Accuracy'''
+"""Practice test for the Thompson GIA Test 3: Number speed & Accuracy"""
 
 import random
 from os import system
 
-score = [0,0]
+score = [0, 0]
 number_questions = 20
 max_num = 15
 
 system('cls||clear')
 while score[1] < number_questions:
-    a = random.randint(1, max_num-5)
-    b = random.randint(a+1, max_num-3)
-    c = random.randint(b+1, max_num)
-    while c - b == b - a:    
-        c = random.randint(b+1, max_num)
+    a = random.randint(1, max_num - 5)
+    b = random.randint(a + 1, max_num - 3)
+    c = random.randint(b + 1, max_num)
+    while c - b == b - a:
+        c = random.randint(b + 1, max_num)
 
     numbers = [a, b, c]
     random.shuffle(numbers)
