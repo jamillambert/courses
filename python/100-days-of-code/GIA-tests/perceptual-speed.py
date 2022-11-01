@@ -3,6 +3,7 @@
 import random
 from os import system
 
+# Letters are grouped to increase occurrences of similar but wrong letters appearing
 group1 = ('b', 'd', 'g', 'h', 'p', 'q', 'y')
 group2 = ('f', 'i', 'j', 'k', 'l', 't')
 group3 = ('m', 'n', 'r', 'u', 'v', 'w')
@@ -15,8 +16,8 @@ while score[1] < number_questions:
     lower = (random.choice(group1), random.choice(group2),
              random.choice(group3), random.choice(group4))
 
-    # Create new lists with the lower case letter instead of using the
-    # full lists so there is a higher chance of the letters matching
+    # Create new lists with one random letter and the lower case letter instead of 
+    # using the full lists so there is a > 50% chance of the letters matching
     second1 = (random.choice(group1).upper(), lower[0].upper())
     second2 = (random.choice(group2).upper(), lower[1].upper())
     second3 = (random.choice(group3).upper(), lower[2].upper())
