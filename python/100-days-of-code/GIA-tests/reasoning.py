@@ -19,8 +19,8 @@ def phrase_generator(word0, word1, phrase_type):
     """Return a joining phrase using a random synonym and form
 
     phrase_type 0 means word0 is true, phrase_type 1 means word1 is true
-    e.g. phrase_generator(('big', 'large'), ('small', 'short'), 0)
-    could return "is bigger" or "is not as small"
+    e.g. phrase_generator(('tall', 'large'), ('small', 'short'), 0)
+    could return "is taller" or "is not as small"
     """
     phrase = ""
     negate = random.randint(0, 1) == 1
