@@ -86,16 +86,17 @@ def main():
         input("\nPress Enter to continue")
         system('cls||clear')
         joining_phrase = phrase_generator(comparator[index], opposites[index], a_type)
-        print(f"Who is {joining_phrase}")
+        print(f"Who is {joining_phrase}, {person0} or {person1}?")
         guess = input(': ')
 
-        if guess == ans:
+        if guess.lower() == ans.lower():
             score[0] += 1
             print("Correct")
         else:
             print(f"Wrong!")
         score[1] += 1
         input("\nPress enter for next question")
+
         system('cls||clear')
     print(f"You scored {score[0]} / {score[1]}")
 
