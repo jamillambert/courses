@@ -6,13 +6,13 @@ from os import system
 
 def add_er(word):
     """If word ends in e an r is added, if it ends in y the y is removed and ier added, else er is added"""
-    if word[-1] == 'e':
+    if word.endswith('e'):
         new_word = word + 'r'
-    elif word[-1] == 'y':
+    elif word.endswith('y'):
         new_word = word[0:-1] + 'ier'
-    elif word[-1] == 'g':
+    elif word.endswith('g'):
         new_word = word + 'ger'
-    elif word[-1] == 'm':
+    elif word.endswith('m'):
         new_word = word + 'mer'
     else:
         new_word = word + 'er'
