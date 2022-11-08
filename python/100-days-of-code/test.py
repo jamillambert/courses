@@ -1,4 +1,4 @@
-# File for testing small sections of code that are not required as part of a project
+# File for testing small sections of code
 def f(a, L=[]):
     L.append(a)
     return L
