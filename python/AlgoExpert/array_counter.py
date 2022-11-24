@@ -24,29 +24,37 @@ def setup(word_array):
 
 def exists(word, word_dict):
     # searches the dictionary and returns True if word is in it
-    sub_dict = word_dict
-    for i in range(len(word)):
-        if word[i] == '*':
-            #check all entries on in sub_dict
-            in_dict = False
-            for key in sub_dict:
-                in_dict = in_dict or exists(word[i+1:], sub_dict[key])
-            return in_dict
-        else:
-            if word[i] in sub_dict:
-                sub_dict = sub_dict[word[i]]
-                continue
+    try:
+        sub_dict = word_dict
+        for i in range(len(word)):
+            if word[i] == '*':
+                #check all entries on in sub_dict
+                in_dict = False
+                for key in sub_dict:
+                    in_dict = in_dict or exists(word[i+1:], sub_dict[key])
+                return in_dict
             else:
-                return False
-    return True
+                if word[i] in sub_dict:
+                    sub_dict = sub_dict[word[i]]
+                    continue
+                else:
+                    return False
+        return True
+    except TypeError:
+        return False
         
     
-    
+# Below is to check the code, including some edge cases  
 word_dict = setup(["bob", "bill", "alice", "alibe", "alidd"])
  
-print(exists("alice", word_dict))
-print(exists("Alice", word_dict))
-print(exists("bob", word_dict))
-print(exists("ali*e", word_dict))
-print(exists("g***e", word_dict))
-print(exists("a***e", word_dict))
+print("Expect True:", exists("alice", word_dict))
+print("Expect False:", exists("Alice", word_dict))
+print("Expect True:", exists("bob", word_dict))
+print("Expect True:", exists("ali*e", word_dict))
+print("Expect False:", exists("***e", word_dict))
+print("Expect True:", exists("****e", word_dict))
+print("Expect False:", exists("*****e", word_dict))
+print("Expect True:", exists("*o", word_dict))
+print("Expect True:", exists("a", word_dict))
+print("Expect False:", exists("", word_dict)) # Returns True, needs to be handled separately if False is required
+print("Expect False:", exists(1, word_dict))
