@@ -1,4 +1,3 @@
-# File for testing small sections of code
 def river_sizes(matrix):
     rivers = []
 
