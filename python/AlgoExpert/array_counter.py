@@ -17,8 +17,7 @@ def setup(word_array):
         for i in range(1, len(word)):
             if word[i] not in sub_dict:
                 sub_dict[word[i]] = {}
-            sub_dict = sub_dict[word[i]]
-        
+            sub_dict = sub_dict[word[i]]        
     return word_dict
 
 
@@ -28,7 +27,7 @@ def exists(word, word_dict):
     sub_dict = word_dict
     for i in range(len(word)):
         if word[i] == '*':
-            #check all entries on dictionary
+            #check all entries on in sub_dict
             in_dict = False
             for key in sub_dict:
                 in_dict = in_dict or exists(word[i+1:], sub_dict[key])
@@ -51,5 +50,3 @@ print(exists("bob", word_dict))
 print(exists("ali*e", word_dict))
 print(exists("g***e", word_dict))
 print(exists("a***e", word_dict))
-
-
