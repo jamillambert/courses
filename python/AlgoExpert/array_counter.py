@@ -22,10 +22,9 @@ def setup(word_array):
 
 
 
-def exists(word, word_dict):
+def exists(word, sub_dict):
     # searches the dictionary and returns True if word is in it
     try:
-        sub_dict = word_dict
         for i in range(len(word)):
             if word[i] == '*':
                 #check all entries on in sub_dict

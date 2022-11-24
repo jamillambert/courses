@@ -1,2 +1,11 @@
-string = "012345"
-print(string[1:])
+
+#array
+def fn(x):
+    print(x)
+    x = '1'
+        
+x = 'string'
+
+fn(x)
+print("after fn array x = ", x)
+
