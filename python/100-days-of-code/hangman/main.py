@@ -17,15 +17,16 @@ from hangman_words import word_list
 import random
 
 class GameState:
+    '''Contains the current state of the game, including the word and guesses so far'''
     def __init__(self):
         self.word = random.choice(word_list)
         self.answer = ['_'] * len(self.word)
         self.lives = len(stages) - 1
-        self.previous_choices = ['']
+        self.previous_choices = []
         self.running_text = "Welcome to hangman, choose your first letter (or type 'exit')\n"
 
     def game_over(self):
-        '''Returns true if the game is over'''
+        '''Returns True if the game is over'''
         return '_' not in self.answer or self.lives == 0
     
     def game_won(self):  
@@ -55,18 +56,28 @@ class GameState:
             return False
         elif len(letter) != 1:
             # A single letter was not input
-            running_text = 'Already chosen letters: ' + ' '.join(self.previous_choices)
-            running_text += "\n\nInvalid input, enter a single letter (or type 'exit')\n"
-        elif letter in self.previous_choices: 
+            self.running_text = 'Already chosen letters: ' + \
+                ' '.join(self.previous_choices)
+            self.running_text += "\n\nInvalid input, enter a single letter (or type 'exit')\n"
+            return True
+        else:
+            self.check_letter(letter)
+            return True
+    
+    def check_letter(self, letter):
+        '''Checks if the input letter is valid, and if in the word adds it to the current answer'''
+        if letter in self.previous_choices: 
             # The letter was already chosen, no change to answer or lives
-            running_text = 'Already chosen letters: ' + ' '.join(self.previous_choices)
-            running_text += "\n\nYou have already tried {}, try another one (or type 'exit')\n".format(
+            self.running_text = 'Already chosen letters: ' + ' '.join(self.previous_choices)
+            self.running_text += "\n\nYou have already tried {}, try another one (or type 'exit')\n".format(
                 letter)
-        elif letter in self.word:
-            # The letter chosen is in the word, it is added to the answer array
-            self.previous_choices.append(letter)
-            running_text = 'Already chosen letters: ' + ' '.join(self.previous_choices)
-            running_text += "\n\nGood work, {} is in the word, choose the next letter (or type 'exit')\n".format(
+            return True
+        self.previous_choices.append(letter)
+        self.running_text = 'Already chosen letters: ' + \
+            ' '.join(self.previous_choices)
+        if letter in self.word:
+            # The letter chosen is in the word, it is added toe the answer array
+            self.running_text += "\n\nGood work, {} is in the word, choose the next letter (or type 'exit')\n".format(
                 letter)
             for i in range(len(self.word)):
                 if letter == self.word[i]:
@@ -74,11 +85,8 @@ class GameState:
         else: 
             # The letter is not in the word, 1 life lost
             self.lives -= 1
-            self.previous_choices.append(letter)
-            running_text = 'Already chosen letters: ' + ' '.join(self.previous_choices)
-            running_text += "\n\nSorry, {} is in not in the word, try another one (or type 'exit')\n".format(
+            self.running_text += "\n\nSorry, {} is in not in the word, try another one (or type 'exit')\n".format(
                 letter)
-        return True
 
 def main():
     # A random word from the list stored in hangman_words.py is chosen within game
