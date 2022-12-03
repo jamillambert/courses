@@ -92,6 +92,7 @@ class GameState:
 
 
 def main():
+    """Creates a new GameState and runs the game until the player chooses to exit"""
     # A random word from the list stored in hangman_words.py is chosen within game
     game = GameState()
 
