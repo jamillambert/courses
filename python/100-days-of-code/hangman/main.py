@@ -91,6 +91,12 @@ class GameState:
                 letter)
 
 
+def play_again():
+    """Returns True if the player chooses to play again"""
+    letter = input("Do you want to play again? (y/n) ")
+    return letter == 'y'
+
+
 def main():
     """Creates a new GameState and runs the game until the player chooses to exit"""
     # A random word from the list stored in hangman_words.py is chosen within game
@@ -116,12 +122,6 @@ def main():
         if not game.input_letter():
             # If the player chooses to exit this breaks out of the loop
             break
-
-
-def play_again():
-    """Returns True if the player chooses to play again"""
-    letter = input("Do you want to play again? (y/n) ")
-    return letter == 'y'
 
 
 if __name__ == "__main__":
