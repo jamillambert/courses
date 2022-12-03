@@ -124,4 +124,5 @@ def play_again():
     return letter == 'y'
 
 
-main()
+if __name__ == "__main__":
+    main()
