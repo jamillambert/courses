@@ -1,3 +1,28 @@
+fn chunkify(s: String, n: u32, fill: Option<char>) -> Vec<String>{
+    // Returns a vector where each element is the input string split
+    // into the specified length.  The last element is filled to the 
+    // specified length with the fill character, or 'x' if None is input
+    let f = fill.unwrap_or('x');
+    let mut chunks = Vec::new();
+    let mut chunk = String::from("");
+    let mut i = 0;
+    for c in s.chars(){
+        if i % n == 0 && i != 0 {
+            // chunk is at length n, add to vector
+            chunks.push(chunk);
+            chunk = String::from("");
+        }
+        chunk.push(c);
+        i += 1;
+    }
+    while chunk.chars().count() as u32 % n != 0{
+        // fill up to length n with fill char f
+        chunk.push(f);
+    }
+    chunks.push(chunk);
+    return chunks;
+}
+
 fn strlen(s: String) -> u32{
     // Returns the number of graphemes in the input string
     let mut count = 0;
@@ -38,4 +63,6 @@ fn main() {
     println!("{}", number);
     let string2 = String::from("12é3a😃"); 
     println!("byte length is {}, char length is {}, grapheme length is {}", string2.len(), string2.chars().count(), strlen(string2));
+    let string = String::from("1234");
+    println!("chunkify {:?}", chunkify(string, 3, Some('r')));
 }
