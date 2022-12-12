@@ -1,14 +1,15 @@
 fn main() {
     let string = String::from("12s3a"); 
-    let number = str_to_int(string);
+    let number = atoi(string);
     println!("{}", number);
 }
 
-fn str_to_int(string: String) -> i32{
+fn atoi(s: String) -> i32{
     // Returns an integer from the input string. 
-    // non numerical characters are ignored and 0 is returned if the string contains no digits
+    // non numerical characters are ignored and 
+    // 0 is returned if the string contains no 
     let mut number = 0;
-    for c in string.chars(){
+    for c in s.chars(){
         if 0 <= c as i32 - 0x30 && c as i32 - 0x30 <= 9 {
             number = number * 10 + c as i32 - 0x30;
         }
