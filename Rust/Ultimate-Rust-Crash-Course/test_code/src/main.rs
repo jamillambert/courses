@@ -1,9 +1,3 @@
-fn main() {
-    let string = String::from("12s3a"); 
-    let number = atoi(string);
-    println!("{}", number);
-}
-
 fn atoi(s: String) -> i32{
     // Returns an integer from the input string. 
     // non numerical characters are ignored and 
@@ -17,3 +11,8 @@ fn atoi(s: String) -> i32{
     return number;
 }
 
+fn main() {
+    let string = String::from("12s3a"); 
+    let number = atoi(string);
+    println!("{}", number);
+}
