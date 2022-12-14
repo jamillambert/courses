@@ -37,10 +37,11 @@ fn chunkify(s: &str, n: u32, fill: Option<char>) -> Vec<String> {
     let mut chunk = String::from("");
     let mut i = 0;
     for c in s.chars() {
-        if i % n == 0 && i != 0 {
+        if i == n {
             // chunk is at length n, add to vector
             chunks.push(chunk);
             chunk = String::from("");
+            i = 0;
         }
         chunk.push(c);
         i += 1;
@@ -56,49 +57,57 @@ fn chunkify(s: &str, n: u32, fill: Option<char>) -> Vec<String> {
 fn strlen(s: &str) -> u32 {
     // Returns the number of graphemes in the input string
     let mut count = 0;
+    let mut extra_bytes = 0;
     for c in s.as_bytes() {
+        println!("{}", c);
         if c >> 5 == 0b110 {
             // char is 2 bytes long, should only count as 1 char
-            count -= 1;
+            extra_bytes += 1;
         } else if c >> 4 == 0b1110 {
             // char is 3 bytes long, should only count as 1 char
-            count -= 2;
+            extra_bytes += 2;
         } else if c >> 3 == 0b11110 {
             // char is 4 bytes long, should only count as 1 char
-            count -= 3;
+            extra_bytes += 3;
         }
         count += 1;
     }
-    return count;
+    count - extra_bytes
 }
 
 fn atoi(s: &str) -> i32 {
-    // Returns an integer from the input string.
+    // Returns a single integer from the input string.
     // non numerical characters are ignored and
     // 0 is returned if the string contains no numbers
     let mut number = 0;
+    let mut sign = 1;
     for c in s.chars() {
-        if 0 <= c as i32 - 0x30 && c as i32 - 0x30 <= 9 {
+        if c == '-' {
+            sign = -1;
+        }
+        else if 0 <= c as i32 - 0x30 && c as i32 - 0x30 <= 9 {
             number = number * 10 + c as i32 - 0x30;
         }
     }
-    return number;
+    sign * number
 }
 
 fn main() {
-    let string = "12s3a";
+    let string = "a";
     let number = atoi(string);
     println!("{}", number);
-    let string2 = "12é3a😃";
+    let string2 = "😂";
     println!(
         "byte length is {}, char length is {}, grapheme length is {}",
         string2.len(),
         string2.chars().count(),
         strlen(string2)
     );
-    let string = "1234";
-    println!("chunkify {:?}", chunkify(string, 3, Some('r')));
+    let string = "12345678910";
+    println!("chunkify {:?}", chunkify(string, 2, Some('r')));
     let vector = vec![0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     let (is_false, is_true) = partition(vector, "is_even");
-    println!("partition false: {:?}, true {:?}", is_false, is_true)
+    println!("partition false: {:?}, true {:?}", is_false, is_true);
+    let one = 240;
+    println!("one {}, shifted 3 {}, shifted 4 {} shifted 5 {}", one, one >> 3, one >> 4, one >> 5);
 }
