@@ -114,13 +114,13 @@ def multiple_turtles(random_start, num_turtles, width, height, pen_width):
 def main():
     """Creates a screen and then runs the animation, different animations are commented out at the bottom"""
 
-    pen_width = 1
+    pen_width = 3
     colour_step = 20
     number_turtles = 50  # Number of turtles for all functions
     random_start = False  # If the initial positions are random or at the centre, in random walk and spirograph
 
     number_steps = 500  # Number of steps in random walk
-    max_step_length = 10  # Maximum step length in random walk
+    max_step_length = 100  # Maximum step length in random walk
 
     separation = 5  # separation of circles in spirograph
     size = 200  # size of circles in spirograph
