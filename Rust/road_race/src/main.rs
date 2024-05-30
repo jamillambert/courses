@@ -5,9 +5,9 @@ use rusty_engine::prelude::*;
 use std::{f32::consts::PI, time::SystemTime};
 
 const TURN_SPEED: f32 = 0.5;
-const PLAYER_SPEED: f32 = 100.0;
-const MAX_TURN: f32 = 10.0;
-const MAX_SPEED: f32 = 700.0;
+const PLAYER_SPEED: f32 = 50.0;
+const MAX_TURN: f32 = 12.0;
+const MAX_SPEED: f32 = 500.0;
 
 struct GameState {
     health_amount: u8,
@@ -50,11 +50,11 @@ fn reset_game(engine: &mut Engine, game_state: &mut GameState) {
     let player = engine.add_sprite("player", SpritePreset::RacingCarBlue);
     let x = -game_state.window_x / 2.0 + 80.0;
     let y = 0.0;
-    player.translation = Vec2::new(x, y); 
+    player.translation = Vec2::new(x, y);
     player.layer = 50.0;
     player.rotation = RIGHT;
     player.collision = true;
-     
+
     for i in 0..10 {
         let roadline = engine.add_sprite(format!("roadline{}", i), SpritePreset::RacingBarrierWhite);
         roadline.scale = 0.1;
@@ -74,7 +74,7 @@ fn loop_motion(sprite: &mut Sprite, game_state: &mut GameState) {
     }
 }
 
-fn game_logic(engine: &mut Engine, game_state: &mut GameState) {    
+fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     // if it is the first run of the game the reset_game function is run
     // to set up the in initial state of the game
     if game_state.frame_no == 0 {
@@ -82,7 +82,7 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         game_state.window_y = engine.window_dimensions.y;
         reset_game(engine, game_state);
     }
-    game_state.frame_no += 1;   
+    game_state.frame_no += 1;
 
 
     if game_state.window_x != engine.window_dimensions.x
@@ -92,7 +92,7 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         game_state.window_x = engine.window_dimensions.x;
         game_state.window_y = engine.window_dimensions.y;
 
-        // Move score text when the window is resized 
+        // Move score text when the window is resized
         let score = engine.texts.get_mut("score").unwrap();
         score.translation.x = engine.window_dimensions.x / 2.0 - 80.0;
         score.translation.y = engine.window_dimensions.y / 2.0 - 30.0;
@@ -130,14 +130,14 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Left, KeyCode::A])
-    {   
+    {
         if game_state.movement_speed >= 10.0 {
         game_state.movement_speed -=  10.0;
         }
     } else if engine
         .keyboard_state
         .pressed_any(&[KeyCode::Right, KeyCode::D])
-    {        
+    {
         if game_state.movement_speed < MAX_SPEED {
         game_state.movement_speed +=  10.0;
         }
