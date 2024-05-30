@@ -40,7 +40,8 @@ def dashed_diamond():
 width = 630
 height = 630
 turtle = Turtle()
-turtle.speed(10)
+turtle.speed(5)
+turtle.hideturtle()
 dashed_cross()
 dashed_diamond()
 screen1 = Screen()
