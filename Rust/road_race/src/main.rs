@@ -1,3 +1,12 @@
+///! Below is the copilot generated doc for this game:
+///!
+///! A simple game where the player can move a car up and down and the car moves forward
+///! The player can also increase and decrease the speed of the car
+///! The game has a score and a high score
+///! The player can move the car up and down with the up and down arrow keys
+///! The player can increase and decrease the speed of the car with the left and right arrow keys
+
+
 #![allow(unused_variables, unused_attributes, dead_code, unused_imports)] //to remove warnings bofore the code is done
 use log::{debug, info};
 use rand::prelude::*;
@@ -9,6 +18,7 @@ const PLAYER_SPEED: f32 = 50.0;
 const MAX_TURN: f32 = 12.0;
 const MAX_SPEED: f32 = 500.0;
 
+/// The state of the game
 struct GameState {
     health_amount: u8,
     lost: bool,
@@ -25,6 +35,7 @@ struct GameState {
     window_y: f32,
 }
 
+/// The default state of the game
 impl Default for GameState {
     fn default() -> Self {
         Self {
@@ -45,6 +56,7 @@ impl Default for GameState {
     }
 }
 
+/// Reset the game to the initial state
 fn reset_game(engine: &mut Engine, game_state: &mut GameState) {
     engine.sprites.clear();
     let player = engine.add_sprite("player", SpritePreset::RacingCarBlue);
@@ -63,6 +75,7 @@ fn reset_game(engine: &mut Engine, game_state: &mut GameState) {
     }
 }
 
+/// Loop the motion of the sprite
 fn loop_motion(sprite: &mut Sprite, game_state: &mut GameState) {
     if sprite.translation.x > game_state.window_x / 2.0 + 1.0 {
         sprite.translation.x = -game_state.window_x / 2.0;
@@ -74,6 +87,7 @@ fn loop_motion(sprite: &mut Sprite, game_state: &mut GameState) {
     }
 }
 
+/// The main game logic
 fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     // if it is the first run of the game the reset_game function is run
     // to set up the in initial state of the game
